@@ -3,5 +3,12 @@
 version = 3
 
 [[package]]
+name = "TM_framework"
+version = "0.1.0"
+
+[[package]]
 name = "html_parser"
 version = "0.1.0"
+dependencies = [
+ "TM_framework",
+]
