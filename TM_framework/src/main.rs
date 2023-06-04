@@ -1,7 +1,7 @@
 // Purpose: main file of the TM_framework
 //import dependencies
 
-use TM_framework::cards::{Card, Color, Language, VictoryPoint, Tag, Requirement, CardResource, Icon, Origin};
+use TM_framework::cards::{Card, Color, Language, VictoryPoint, Tag, Requirement, CardResource, Icon, Origin, Game, MinMax, TurmoilParty};
 
 fn main() {
 
@@ -15,7 +15,7 @@ fn main() {
         vec![Language::Hungarian("Húzz 2-t a maradék cégbirodalom kártyák közül. Egyiket megkapod mint \"második céged\" a vagyonával és képességeivel együtt".to_string()),
             Language::English("Draw 2 cards from the remaining corporation cards, then choose 1 of them to become your \"second corporation\" with all its assets and abilities.".to_string())],
         ).set_vp(VictoryPoint::VP(3))
-        .set_requironment(Requirement::Tag(vec![(Tag::Earth, 1)]))
+        .set_requironment(Requirement::Tag(vec![(Tag::Earth, 1, MinMax::Min)]))
         .add_origin(Origin::Custom("Intrica".to_string()))
     );
     custom_cards.push(Card::new(
@@ -26,8 +26,7 @@ fn main() {
         17,
         vec![Language::Hungarian("Húzz 3-at a maradék prelude kártyák közül, majd játssz ki egyet.".to_string()),
             Language::English("Draw 3 cards from the remaining Prelude cards, then play 1 of them.".to_string())],
-        ).set_requironment(Requirement::Tag(vec![(Tag::Earth, 1)]))
-        .add_origin(Origin::Custom("Intrica".to_string()))
+        ).add_origin(Origin::Custom("Intrica".to_string()))
     );
     custom_cards.push(Card::new(
         "#I03".to_string(),
@@ -37,8 +36,7 @@ fn main() {
         7,
         vec![Language::Hungarian("Keress egy általad választott jelzésű kártyát a pakliból, majd vedd a kezedbe! A többi lapot dobd el.".to_string()),
             Language::English("Search the deck for a card with a tag of your choice, and add it to your hand. Discard the rest.".to_string())],
-        ).set_requironment(Requirement::Tag(vec![(Tag::Earth, 1)]))
-        .add_tag(Tag::Science)
+        ).add_tag(Tag::Science)
         .add_origin(Origin::Custom("Intrica".to_string()))
     );
     custom_cards.push(Card::new(
@@ -49,8 +47,7 @@ fn main() {
         11,
         vec![Language::Hungarian("Akció: költs el 2 acél erőforrást, majd tegyél egy drónt erre a lapra VAGY költs el X (maximum annyi energia erőforrást, ahány drón van ezen a lapon), majd vegyél magadhoz 2X palánta erőforrást".to_string()),
             Language::English("Action: Spend 2 steel resources to add a drone to this card OR spend X energy (maximum drone number) to add 2X plants to your inventory.".to_string())],
-        ).set_requironment(Requirement::Tag(vec![(Tag::Earth, 1)]))
-        .add_tags(vec![Tag::Building, Tag::Plant])
+        ).add_tags(vec![Tag::Building, Tag::Plant])
         .set_card_resource(CardResource::Custom("drone".to_string(), Icon::Icon("drone".to_string()), 0))
         .add_origin(Origin::Custom("Intrica".to_string()))
         .set_vp(VictoryPoint::VP(1))
@@ -103,7 +100,7 @@ fn main() {
         .add_tags(vec![Tag::Science, Tag::Science])
     );
     println!("{:?}", custom_cards);
-    /*
+    
     custom_cards.push(Card::new(
         "#I09".to_string(),
         Color::Green,
@@ -135,7 +132,7 @@ fn main() {
         ).add_origin(Origin::Custom("Intrica".to_string()))
         .add_tag(Tag::Space)
         .set_vp(VictoryPoint::PerTag(2, Tag::Jovian, 1))
-        .set_requironment(Requirement::Tag(vec![(Tag::Jovian, 1)]))
+        .set_requironment(Requirement::Tag(vec![(Tag::Jovian, 1, MinMax::Min)]))
     );
     custom_cards.push(Card::new(
         "#I12".to_string(),
@@ -148,6 +145,40 @@ fn main() {
         ).add_origin(Origin::Custom("Intrica".to_string()))
         .add_tag(Tag::Event)
     );
+    // __________________________________________________________________6 cards __________________________________________________________________________
+    
+    custom_cards.push(Card::new(
+        "#I17".to_string(),
+        Color::Blue,
+        ///! find a better name
+        vec![Language::Hungarian("Eget rengető tudományos felfedezés".to_string()), 
+            Language::English("Groudbreaking scientific discovery".to_string())],
+        25,
+        vec![Language::Hungarian("Hatás: Ha több mint 15 tudomény ikonod van, azonnal megnyered a játékot.".to_string()),
+            Language::English("Effect: If you have more than 15 science tags, you win the game immediately.".to_string())],
+        ).add_origin(Origin::Custom("Intrica".to_string())).add_origin(Origin::Auction)
+        .add_tag(Tag::Custom("Wonder".to_string()))
+        .set_vp(VictoryPoint::PerTag(1, Tag::Science, 2))
+        .set_requironment(Requirement::Custom(Box::new(|game: Game| {
+            match game.currentPlayer().tags().iter().filter(|(tag, _)| *tag == Tag::Science).next(){
+                Some((_, amount)) => *amount <= 10,
+                None => true,
+            }
+        })))
+        
+    );
+    custom_cards.push(Card::new(
+        "#I18".to_string(),
+        Color::Red,
+        vec![Language::Hungarian("".to_string()),
+            Language::English("".to_string())],
+        todo!(),
+        vec![Language::Hungarian("".to_string()),
+            Language::English("".to_string())],
+        ).add_origin(Origin::Custom("Intrica".to_string()))
+    );
+
+
     // __________________________________________________________________6 cards __________________________________________________________________________
     // _____________________________________________________________Ligvigfui extension____________________________________________________________________
     // not green: kelvinists, unity
@@ -215,5 +246,5 @@ fn main() {
             Language::English("".to_string())],
         )
     );
-     */
+    
 }

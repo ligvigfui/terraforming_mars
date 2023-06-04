@@ -52,10 +52,12 @@ pub mod cards{
         card_resource: Option<CardResource>,
         bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
         effects: Vec<Language>,
+        on_card_action: Option<Vec<OnCardAction>>,
         motivational_quote: Option<Vec<Language>>,
         origin: Vec<Origin>
     }
 
+    //setup implementation
     impl Card {
         pub fn new(id: String, color: Color, name: Vec<Language>, cost: i32, effects: Vec<Language>) -> Card {
             Card {
@@ -69,9 +71,27 @@ pub mod cards{
                 card_resource: None,
                 bets_time_to_get: None,
                 effects,
+                on_card_action: None,
                 motivational_quote: None,
                 origin: Vec::new(),
             }
+        }
+        pub fn add_on_card_action(mut self, on_card_action: OnCardAction)-> Card{
+            let action = on_card_action;
+            if let Some(ref mut on_card_action) = self.on_card_action {
+                on_card_action.push(action);
+            } else {
+                self.on_card_action = Some(vec![action]);
+            }
+            self
+        }
+        pub fn add_on_card_actions(mut self, on_card_actions: Vec<OnCardAction>)-> Card{
+            if let Some(ref mut on_card_action) = self.on_card_action {
+                on_card_action.extend(on_card_actions);
+            } else {
+                self.on_card_action = Some(on_card_actions);
+            }
+            self
         }
         pub fn set_requironment(mut self, requirement: Requirement)-> Card{
             self.requirements = Some(requirement);
@@ -120,6 +140,20 @@ pub mod cards{
             self
         }
     }
+    
+    impl PartialEq for Card {
+        fn eq(&self, other: &Self) -> bool {
+            format!("{:?}", self) == format!("{:?}", other)
+        }
+    }
+
+    //extern crate implementation
+    impl Card {
+        pub fn tags(&self) -> &Vec<Tag> {
+            &self.tags
+        }
+    }
+    
     #[derive(Debug)]
     pub enum Usefullness{
         Great,
@@ -137,34 +171,51 @@ pub mod cards{
         players: Vec<Player>,
         deck: Vec<Card>,
         discard: Vec<Card>,
-        active_player: i32,
-        generation: i32,
+        current_player: usize,
+        generation: usize,
         map: String,
         temperature: i32,
-        oxygen: i32,
-        ocean: i32,
-        venus: i32,
+        oxygen: usize,
+        ocean: usize,
+        venus: usize,
         milestones: Vec<Card>,
         awards: Vec<Card>,
         phase: String,
         history: String,
     }
 
+    impl Game {
+        pub fn currentPlayer(&self) -> &Player {
+            &self.players[self.current_player as usize]
+        }
+    }
+
     #[derive(Debug)]
     ///! still not good need to change milestone, award, action
-    struct Player {
-        id: i32,
+    pub struct Player {
+        id: usize,
         name: String,
-        cards: Vec<Card>,
+        hand: Vec<Card>,
+        played_cards: Vec<Card>,
         production: Vec<Resource>,
         resources: Vec<Resource>,
+        tags: Vec<(Tag, usize)>,
         vp: i32,
-        terraform_rating: i32,
+        terraform_rating: usize,
         corporation: Vec<Corporation>,
         prelude: Vec<Prelude>,
         milestones: Vec<Card>,
         awards: Vec<Card>,
-        actions: i32,
+        actions: usize,
+    }
+
+    impl Player {
+        pub fn hand(&self) -> &Vec<Card> {
+            &self.hand
+        }
+        pub fn tags(&self) -> &Vec<(Tag, usize)> {
+            &self.tags
+        }
     }
 
     #[derive(Debug)]
@@ -182,19 +233,24 @@ pub mod cards{
         effect: Vec<Language>,
     }
 
+    pub struct Effect {
+        criteria: Option<OnCardAction>,
+        reward: OnCardAction,
+    }
+
     #[derive(Debug)]
     pub enum OnCardAction {
         // move card from research to hand
-        BuyCard(i32),
+        BuyCard(usize),
         // draw random card from deck
-        DrawCard(i32),
+        DrawCard(usize),
         // move card from research or hand to discard
-        DiscardCard(i32),
+        Discard(usize),
         ModifyResources(Resource),
         ModifyProduction(Resource),
-        MustRemoveFromOtherPlayersResources(Resource), 
-        MustRemoveFromOtherPlayersProduction(Resource),
-        RemoveFromOtherPlayersResources(Resource),
+        MustRemoveFromAnyPlayersResources(Resource), 
+        MustRemoveFromAnyPlayersProduction(Resource),
+        RemoveFromAnyPlayersResources(Resource),
         PlaceTile,
         RemoveTile,
         ModifyTerraformRating(i32),
@@ -221,11 +277,11 @@ pub mod cards{
     pub enum VictoryPoint {
         None,
         VP(i32),
-        PerTag(i32, Tag, i32),
-        PerResource(i32, CardResource, i32),
+        PerTag(i32, Tag, usize),
+        PerResource(i32, CardResource, usize),
     }
 
-    #[derive(Debug)]
+    #[derive(Debug, PartialEq)]
     pub enum Tag {
         Building,
         Space,
@@ -240,15 +296,17 @@ pub mod cards{
         Event,
         Venus,
         Wild,
+        Custom(String),
     }
 
+
     pub enum Requirement {
-        Tag(Vec<(Tag, i32)>),
+        Tag(Vec<(Tag, usize, MinMax)>),
         Production(Resource),
         Tile(String),
         GlobalParameter(GlobalParameter, MinMax),
-        TR(i32 , MinMax),
-        CardResource(CardResource, i32),
+        TR(usize , MinMax),
+        CardResource(CardResource, usize),
         Colony(MinMax),
         Chairman,
         RulingParty(TurmoilParty),
@@ -261,8 +319,8 @@ pub mod cards{
             match self {
                 Requirement::Tag(tags) => {
                     let mut s = String::new();
-                    for (tag, amount) in tags {
-                        s.push_str(&format!("{} {:?}, ", amount, tag));
+                    for (tag, amount, minmax) in tags {
+                        s.push_str(&format!("{} {:?} {:?}, ", amount, minmax, tag));
                     }
                     write!(f, "{}", s)
                 },
@@ -319,29 +377,29 @@ pub mod cards{
     #[derive(Debug)]
     pub enum GlobalParameter {
         Temperature(i32),
-        Oxygen(i32),
-        Ocean(i32),
-        Venus(i32),
+        Oxygen(usize),
+        Ocean(usize),
+        Venus(usize),
     }
 
     #[derive(Debug)]
     pub enum Resource {
-        Money(i32),
-        Steel(i32),
-        Titanium(i32),
-        Plant(i32),
-        Energy(i32),
-        Heat(i32),
+        Money(usize),
+        Steel(usize),
+        Titanium(usize),
+        Plant(usize),
+        Energy(usize),
+        Heat(usize),
     }
 
     #[derive(Debug)]
     pub enum CardResource {
-        Microbe(i32),
-        Animal(i32),
-        Science(i32),
-        Asteroid(i32),
-        Floaters(i32),
-        Custom(String, Icon, i32),
+        Microbe(usize),
+        Animal(usize),
+        Science(usize),
+        Asteroid(usize),
+        Floaters(usize),
+        Custom(String, Icon, usize),
     }
 
     ///! TODO
