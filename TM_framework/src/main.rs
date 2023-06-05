@@ -3,7 +3,13 @@
 
 use TM_framework::cards::{Card, Color, Language, VictoryPoint, Tag, Requirement, CardResource, Icon, Origin, Game, MinMax, TurmoilParty};
 
+
+
 fn main() {
+
+    // max 64 card / expansion
+
+    let orig_auc = Origin::Custom("Auction".to_string());
 
     let mut custom_cards = Vec::new();
     custom_cards.push(Card::new(
@@ -156,7 +162,7 @@ fn main() {
         25,
         vec![Language::Hungarian("Hatás: Ha több mint 15 tudomény ikonod van, azonnal megnyered a játékot.".to_string()),
             Language::English("Effect: If you have more than 15 science tags, you win the game immediately.".to_string())],
-        ).add_origin(Origin::Custom("Intrica".to_string())).add_origin(Origin::Auction)
+        ).add_origin(Origin::Custom("Intrica".to_string())).add_origin(orig_auc)
         .add_tag(Tag::Custom("Wonder".to_string()))
         .set_vp(VictoryPoint::PerTag(1, Tag::Science, 2))
         .set_requironment(Requirement::Custom(Box::new(|game: Game| {
@@ -180,7 +186,7 @@ fn main() {
 
 
     // __________________________________________________________________6 cards __________________________________________________________________________
-    // _____________________________________________________________Ligvigfui extension____________________________________________________________________
+    // _____________________________________________________________Turmoil extended____________________________________________________________________
     // not green: kelvinists, unity
     // not red: reds
     // not blue: marsfirst, greens, scientists

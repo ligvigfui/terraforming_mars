@@ -36,7 +36,6 @@ pub mod cards{
         Colonies,
         Turmoil,
         Promo,
-        Auction,
         Custom(String),
     }
 
@@ -397,8 +396,10 @@ pub mod cards{
         Microbe(usize),
         Animal(usize),
         Science(usize),
-        Asteroid(usize),
         Floaters(usize),
+        Asteroid(usize),
+        Data(usize),
+        Radtiation(usize),
         Custom(String, Icon, usize),
     }
 
