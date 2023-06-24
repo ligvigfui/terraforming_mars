@@ -1,4 +1,6 @@
-use super::{player::{Player, Resource}, GlobalParameter, Icon};
+use super::{Icon, player::*, board::*};
+
+
 
 
 

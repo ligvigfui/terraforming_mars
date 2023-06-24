@@ -1,11 +1,16 @@
-// Purpose: main file of the TM_framework
-//import dependencies
+//! remove unreachable_code
+#![allow(unreachable_code)]
 
-use TM_framework::game::{*, card::{*, project::*}};
+
+use TM_framework::*;
 
 
 
 fn main() {
+    println!("Hello, world! {}", version);
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).unwrap();
+
 
     // max 64 card / expansion
 
@@ -166,7 +171,7 @@ fn main() {
         .add_tag(Tag::Custom("Wonder".to_string()))
         .set_vp(VictoryPoint::PerTag(1, Tag::Science, 2))
         .set_requironment(Requirement::Custom(Box::new(|game: Game| {
-            match game.currentPlayer().tags().iter().filter(|(tag, _)| *tag == Tag::Science).next(){
+            match game.current_player().tags().iter().filter(|(tag, _)| *tag == Tag::Science).next(){
                 Some((_, amount)) => *amount <= 10,
                 None => true,
             }

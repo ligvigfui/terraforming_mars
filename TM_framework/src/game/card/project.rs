@@ -1,4 +1,4 @@
-use crate::game::{Language, Origin, MinMax, GlobalParameter, TurmoilParty, Game};
+use crate::game::{Language, Origin, TurmoilParty, Game};
 
 use super::*;
 

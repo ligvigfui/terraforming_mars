@@ -4,6 +4,8 @@ pub mod card;
 pub mod player;
 pub mod milestone;
 pub mod award;
+pub mod map;
+pub mod board;
 
 
 
@@ -65,9 +67,13 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn currentPlayer(&self) -> &Player {
+    pub fn current_player(&self) -> &Player {
         &self.players[self.current_player as usize]
     }
+    pub fn next_player(&mut self) {
+        self.current_player = (self.current_player + 1) % self.players.len();
+    }
+
 }
 
 
@@ -94,38 +100,6 @@ pub enum TurmoilParty {
     MarsFirst,
 }
 
-#[derive(Debug)]
-pub enum MinMax {
-    Min,
-    Max,
-}
-
-#[derive(Debug)]
-pub enum GlobalParameter {
-    Temperature(i32),
-    Oxygen(usize),
-    Ocean(usize),
-    Venus(usize),
-}
-
-#[derive(Debug)]
-pub struct GlobalParameters {
-    temperature: GlobalParameter,
-    oxygen: GlobalParameter,
-    ocean: GlobalParameter,
-    venus: GlobalParameter,
-}
-
-impl GlobalParameters {
-    pub fn new() -> Self {
-        GlobalParameters {
-            temperature: GlobalParameter::Temperature(-30),
-            oxygen: GlobalParameter::Oxygen(0),
-            ocean: GlobalParameter::Ocean(0),
-            venus: GlobalParameter::Venus(0),
-        }
-    }
-}
 
 ///! TODO
 #[derive(Debug)]
