@@ -2,22 +2,24 @@
 
 use std::vec;
 
-use TM_framework::cards::Card;
+use TM_framework::Game::{Card::Project::{ProjectCard, Color}, Language};
+
+
 
 
 trait FromHtml {
     fn from_html(html: &str) -> Self;
 }
-impl FromHtml for Card {
+impl FromHtml for ProjectCard {
     fn from_html(html: &str) -> Self {
         let cost = html.find("price>").unwrap();
         let end = html[cost..].find("<").unwrap();
         let cost = html[cost + 6..cost + end].parse::<i32>().unwrap();
-        let mut card = Card::new(
+        let card = ProjectCard::new(
             "id".to_string(),
-            TM_framework::cards::Color::Green,
+            Color::Green,
             vec![],
-            0,
+            cost,
             vec![],
         );
         card
@@ -37,9 +39,10 @@ fn main() {
 //create tests
 #[cfg(test)]
 mod tests {
+    use TM_framework::Game::{Card::{Project::Requirement, OnCardAction, Tag, VictoryPoint}, Origin, MinMax};
+
     use crate::*;
-    use TM_framework::cards::{Language, MinMax};
-    
+        
 
 
     fn one_card() -> String {
@@ -64,21 +67,21 @@ mod tests {
     #[test]
     fn test_card_from_html(){
         let card = one_card();
-        let card = Card::from_html(&card);
-        let expected_card = Card::new(
+        let card = ProjectCard::from_html(&card);
+        let expected_card = ProjectCard::new(
             "#245".to_string(),
-            TM_framework::cards::Color::Green,
+            Color::Green,
             vec![Language::English("Solarnet".to_string())],
             7,
             vec![Language::English("(Requires Venus, Earth and Jovian tags. Draw 2 cards).".to_string())],
-        ).add_origin(TM_framework::cards::Origin::VenusNext)
-        .set_requironment(TM_framework::cards::Requirement::Tag(vec![
-            (TM_framework::cards::Tag::Venus, 1, MinMax::Min),
-            (TM_framework::cards::Tag::Earth, 1, MinMax::Min),
-            (TM_framework::cards::Tag::Jovian, 1, MinMax::Min),
+        ).add_origin(Origin::VenusNext)
+        .set_requironment(Requirement::Tag(vec![
+            (Tag::Venus, 1, MinMax::Min),
+            (Tag::Earth, 1, MinMax::Min),
+            (Tag::Jovian, 1, MinMax::Min),
         ]))
-        .add_on_card_action(TM_framework::cards::OnCardAction::DrawCard(2))
-        .set_vp(TM_framework::cards::VictoryPoint::VP(1));
+        .add_on_card_action(OnCardAction::DrawCard(2))
+        .set_vp(VictoryPoint::VP(1));
         assert_eq!(card, expected_card);
     }
 

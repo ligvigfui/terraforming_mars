@@ -1,7 +1,7 @@
 // Purpose: main file of the TM_framework
 //import dependencies
 
-use TM_framework::cards::{Card, Color, Language, VictoryPoint, Tag, Requirement, CardResource, Icon, Origin, Game, MinMax, TurmoilParty};
+use TM_framework::game::{*, card::{*, project::*}};
 
 
 
@@ -12,7 +12,7 @@ fn main() {
     let orig_auc = Origin::Custom("Auction".to_string());
 
     let mut custom_cards = Vec::new();
-    custom_cards.push(Card::new(
+    custom_cards.push(ProjectCard::new(
         "I01".to_string(),
         Color::Green,
         vec![Language::English("Company acquisition".to_string()), 
@@ -24,7 +24,7 @@ fn main() {
         .set_requironment(Requirement::Tag(vec![(Tag::Earth, 1, MinMax::Min)]))
         .add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I02".to_string(),
         Color::Green,
         vec![Language::English("Aid from afar".to_string()), 
@@ -34,7 +34,7 @@ fn main() {
             Language::English("Draw 3 cards from the remaining Prelude cards, then play 1 of them.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I03".to_string(),
         Color::Green,
         vec![Language::English("Célzott kutatás".to_string()), 
@@ -45,7 +45,7 @@ fn main() {
         ).add_tag(Tag::Science)
         .add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I04".to_string(),
         Color::Blue,
         vec![Language::English("Bio drone building".to_string()), 
@@ -59,7 +59,7 @@ fn main() {
         .set_vp(VictoryPoint::VP(1))
     );
     // TODO separate this card into 2 cards
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I05".to_string(),
         Color::Blue,
         vec![Language::English("Private army".to_string()), 
@@ -69,7 +69,7 @@ fn main() {
             Language::English("Decrease your MC production 4 step. Effect: only plant resources may be removed from you and only greenery and ocean tiles can be placed by others next to you.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I06".to_string(),
         Color::Red,
         vec![Language::English("Delivery error".to_string()), 
@@ -82,7 +82,7 @@ fn main() {
         .add_tag(Tag::Event)
     );
     // __________________________________________________________________6 cards __________________________________________________________________________
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I07".to_string(),
         Color::Green,
         vec![Language::Hungarian("Nem etikus állatkísérletek".to_string()),
@@ -94,7 +94,7 @@ fn main() {
         .add_tag(Tag::Science)
         .set_vp(VictoryPoint::VP(-1))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I08".to_string(),
         Color::Green,
         vec![Language::Hungarian("Közös kutatás".to_string()),
@@ -107,7 +107,7 @@ fn main() {
     );
     println!("{:?}", custom_cards);
     
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I09".to_string(),
         Color::Green,
         vec![Language::Hungarian("".to_string()),
@@ -117,7 +117,7 @@ fn main() {
             Language::English("".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I10".to_string(),
         Color::Blue,
         vec![Language::Hungarian("Magán tó".to_string()),
@@ -127,7 +127,7 @@ fn main() {
             Language::English("Place an ocean tile on a NON RESERVED land area, then PLACE YOUR MARKER ON IT. Only you may build next to it.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I11".to_string(),
         Color::Blue,
         vec![Language::Hungarian("Bázis a Titánon".to_string()),
@@ -140,7 +140,7 @@ fn main() {
         .set_vp(VictoryPoint::PerTag(2, Tag::Jovian, 1))
         .set_requironment(Requirement::Tag(vec![(Tag::Jovian, 1, MinMax::Min)]))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I12".to_string(),
         Color::Red,
         vec![Language::Hungarian("Uno revers".to_string()),
@@ -153,7 +153,7 @@ fn main() {
     );
     // __________________________________________________________________6 cards __________________________________________________________________________
     
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I17".to_string(),
         Color::Blue,
         ///! find a better name
@@ -173,7 +173,7 @@ fn main() {
         })))
         
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#I18".to_string(),
         Color::Red,
         vec![Language::Hungarian("".to_string()),
@@ -187,10 +187,25 @@ fn main() {
 
     // __________________________________________________________________6 cards __________________________________________________________________________
     // _____________________________________________________________Turmoil extended____________________________________________________________________
-    // not green: kelvinists, unity
-    // not red: reds
-    // not blue: marsfirst, greens, scientists
-    custom_cards.push(Card::new(
+    // one more of these cards with other extensions:
+    // scientist, kelvinist, unity
+    // type of cards: base(extensions)
+    // mars:      G 1(1), B 1,    R (1)
+    // scientist: G 1,    B 1,    R (2)
+    // unity:     G 2,    B (1),  R (1)
+    // green:     G 1,    B 1(1), R 0
+    // reds:      G 1(1), B 0,    R 1
+    // kelvinist: G 2,    B (1),  R (1)
+
+    // mars:      G 4,    B 3,    R 1
+    // scientist: G 5,    B 3,    R 0
+    // unity:     G 4,    B 3,    R 1
+    // green:     G 5,    B 2,    R 2
+    // reds:      G 4,    B 4,    R 1
+    // kelvinist: G 4,    B 3,    R 1
+
+    // green, red: moon 
+    custom_cards.push( ProjectCard::new(
         "#L01".to_string(),
         Color::Green,
         vec![Language::Hungarian("".to_string()),
@@ -200,7 +215,7 @@ fn main() {
             Language::English("".to_string())],
         )
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#L02".to_string(),
         Color::Green,
         vec![Language::Hungarian("".to_string()),
@@ -210,7 +225,7 @@ fn main() {
             Language::English("".to_string())],
         )
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#L03".to_string(),
         Color::Green,
         vec![Language::Hungarian("".to_string()),
@@ -220,7 +235,7 @@ fn main() {
             Language::English("".to_string())],
         )
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#L04".to_string(),
         Color::Blue,
         vec![Language::Hungarian("Ültetés törvény".to_string()),
@@ -231,7 +246,7 @@ fn main() {
         ).add_origin(Origin::Turmoil).add_origin(Origin::Custom("Ligvigfui extention".to_string()))
         .set_requironment(Requirement::RulingParty(TurmoilParty::Greens))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#L05".to_string(),
         Color::Blue,
         vec![Language::Hungarian("Építkezési engedély".to_string()),
@@ -242,7 +257,7 @@ fn main() {
         ).add_origin(Origin::Turmoil).add_origin(Origin::Custom("Ligvigfui extention".to_string()))
         .set_requironment(Requirement::RulingParty(TurmoilParty::MarsFirst))
     );
-    custom_cards.push(Card::new(
+    custom_cards.push( ProjectCard::new(
         "#L06".to_string(),
         Color::Red,
         vec![Language::Hungarian("".to_string()),
