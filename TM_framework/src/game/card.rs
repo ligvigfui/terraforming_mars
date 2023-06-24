@@ -1,4 +1,5 @@
-use super::{Icon, player::*, board::*};
+use crate::*;
+
 
 
 
@@ -33,21 +34,21 @@ pub struct Effect {
 #[derive(Debug)]
 pub enum OnCardAction {
     // move card from research to hand
-    BuyCard(usize),
+    BuyCard(u8),
     // draw random card from deck
-    DrawCard(usize),
+    DrawCard(u8),
     // move card from research or hand to discard
-    Discard(usize),
+    Discard(u8),
     ModifyResources(Resource),
     ModifyProduction(Resource),
     MustRemoveFromAnyPlayersResources(Resource), 
     MustRemoveFromAnyPlayersProduction(Resource),
     RemoveFromAnyPlayersResources(Resource),
-    PlaceTile,
-    RemoveTile,
-    ModifyTerraformRating(i32),
-    ModifyGlobalParameter(GlobalParameter, i32),
-    ModifyCardResource(CardResource, i32),
+    PlaceTile(OccupiedTileType),
+    RemoveTile(OccupiedTileType),
+    ModifyTerraformRating(i8),
+    ModifyGlobalParameter(GlobalParameter, i8),
+    ModifyCardResource(CardResource, i8),
     PlaceColony,
     MoveDelegete,
 }

@@ -1,4 +1,4 @@
-use super::{ card::{project::ProjectCard, Tag, prelude::Prelude, corporation::Corporation}};
+use super::{*, card::{project::ProjectCard, Tag, prelude::Prelude, corporation::Corporation}};
 
 
 #[derive(Debug)]
@@ -17,6 +17,21 @@ pub struct Player {
     vp: i16,
     terraform_rating: u8,
     actions: u8,
+}
+
+
+impl Player {
+    pub fn hand(&self) -> &Vec<ProjectCard> {
+        &self.hand
+    }
+    pub fn tags(&self) -> &Vec<(Tag, usize)> {
+        &self.tags
+    }/* 
+    pub fn place_tile(&self, tile: OccupiedTileType) -> Result<(), String> {
+        if !self.can_place_tile(&tile) {return Err("Not enough resources".to_string());}
+        self.modify_resources(&tile.cost())?;
+        Ok(())
+    } */
 }
 
 #[derive(Debug)]
@@ -100,14 +115,6 @@ impl Resources {
     }
 }
 
-impl Player {
-    pub fn hand(&self) -> &Vec<ProjectCard> {
-        &self.hand
-    }
-    pub fn tags(&self) -> &Vec<(Tag, usize)> {
-        &self.tags
-    }
-}
 
 #[derive(Debug)]
 pub enum Resource {
