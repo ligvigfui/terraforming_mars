@@ -1,4 +1,4 @@
-use crate::game::{Language, Origin, TurmoilParty, Game};
+use crate::{game::{Language, Origin, TurmoilParty, Game}, action::Action};
 
 use super::*;
 
@@ -26,14 +26,16 @@ pub struct ProjectCard {
     color: Color,
     name: Vec<Language>,
     cost: i32,
-    vp: VictoryPoint,
+    requirements: Option<Vec<Requirement>>,
     tags: Vec<Tag>,
-    requirements: Option<Requirement>,
+    effect_discription: Vec<Language>,
     card_resource: Option<CardResource>,
-    bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
-    effects: Vec<Language>,
+    action: Vec<Action>,
+    effect: Vec<Effect>,
     on_card_action: Option<Vec<OnCardAction>>,
+    vp: VictoryPoint,
     motivational_quote: Option<Vec<Language>>,
+    bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
     origin: Vec<Origin>
 }
 
@@ -50,10 +52,12 @@ impl ProjectCard {
             requirements: None,
             card_resource: None,
             bets_time_to_get: None,
-            effects,
             on_card_action: None,
             motivational_quote: None,
             origin: Vec::new(),
+            effect_discription: Vec::new(),
+            action: Vec::new(),
+            effect: Vec::new(),
         }
     }
     pub fn add_on_card_action(mut self, on_card_action: OnCardAction)-> ProjectCard{
@@ -73,8 +77,14 @@ impl ProjectCard {
         }
         self
     }
-    pub fn set_requironment(mut self, requirement: Requirement)-> ProjectCard{
-        self.requirements = Some(requirement);
+    pub fn add_requirement(mut self, requirement: Requirement)-> ProjectCard {
+        if let Some(mut requirements) = self.requirements {
+            requirements.push(requirement);
+            self.requirements = Some(requirements);
+        }
+        else {
+            self.requirements = Some(vec![requirement])
+        };
         self
     }
     pub fn set_vp(mut self, vp: VictoryPoint)-> Self{
@@ -140,7 +150,7 @@ pub enum Requirement {
     Chairman,
     RulingParty(TurmoilParty),
     TwoPartyLeaders,
-    Custom(Box<dyn Fn(Game) -> bool>),
+    Custom(Box<dyn Fn(&Game) -> Result<(), String>>),
 }
 
 impl std::fmt::Debug for Requirement {

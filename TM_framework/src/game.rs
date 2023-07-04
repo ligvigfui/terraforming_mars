@@ -22,14 +22,19 @@ pub mod board;
 
 #[derive(Debug)]
 enum Phase {
+    // somehow get cards to chose from
     Draft,
+    // buy cards to your hand
     Research,
     Action,
     Production,
+    // end game check
     End,
+    // push one Global parameter for pussies
     WorldGovernmentTerraforming,
     ColonyProduction,
     Turmoil,
+    NextPlayer,
 }
 
 #[derive(Debug)]

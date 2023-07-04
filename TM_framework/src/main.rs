@@ -2,6 +2,8 @@
 #![allow(unreachable_code)]
 
 
+use std::vec;
+
 use TM_framework::*;
 
 
@@ -26,7 +28,7 @@ fn main() {
         vec![Language::Hungarian("Húzz 2-t a maradék cégbirodalom kártyák közül. Egyiket megkapod mint \"második céged\" a vagyonával és képességeivel együtt".to_string()),
             Language::English("Draw 2 cards from the remaining corporation cards, then choose 1 of them to become your \"second corporation\" with all its assets and abilities.".to_string())],
         ).set_vp(VictoryPoint::VP(3))
-        .set_requironment(Requirement::Tag(vec![(Tag::Earth, 1, MinMax::Min)]))
+        .add_requirement(Requirement::Tag(vec![(Tag::Earth, 2, MinMax::Min)]))
         .add_origin(Origin::Custom("Intrica".to_string()))
     );
     custom_cards.push( ProjectCard::new(
@@ -38,6 +40,7 @@ fn main() {
         vec![Language::Hungarian("Húzz 3-at a maradék prelude kártyák közül, majd játssz ki egyet.".to_string()),
             Language::English("Draw 3 cards from the remaining Prelude cards, then play 1 of them.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
+        .add_requirement(Requirement::Tag(vec![(Tag::Earth, 1, MinMax::Min)]))
     );
     custom_cards.push( ProjectCard::new(
         "#I03".to_string(),
@@ -115,12 +118,16 @@ fn main() {
     custom_cards.push( ProjectCard::new(
         "#I09".to_string(),
         Color::Green,
-        vec![Language::Hungarian("".to_string()),
-            Language::English("".to_string())],
-        todo!(),
+        vec![Language::Hungarian("Érzékeny importált állatok".to_string()),
+            Language::English("Sensitive imported animals".to_string())],
+        15,
         vec![Language::Hungarian("".to_string()),
             Language::English("".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
+        .add_requirement(Requirement::GlobalParameter(GlobalParameter::Ocean(9), MinMax::Min))
+        .add_requirement(Requirement::GlobalParameter(GlobalParameter::Oxygen(14), MinMax::Min))
+        .add_requirement(Requirement::GlobalParameter(GlobalParameter::Temperature(8), MinMax::Min))
+        .set_vp(VictoryPoint::PerResource(2, CardResource::Animal(1)))
     );
     custom_cards.push( ProjectCard::new(
         "#I10".to_string(),
@@ -143,7 +150,7 @@ fn main() {
         ).add_origin(Origin::Custom("Intrica".to_string()))
         .add_tag(Tag::Space)
         .set_vp(VictoryPoint::PerTag(2, Tag::Jovian, 1))
-        .set_requironment(Requirement::Tag(vec![(Tag::Jovian, 1, MinMax::Min)]))
+        .add_requirement(Requirement::Tag(vec![(Tag::Jovian, 1, MinMax::Min)]))
     );
     custom_cards.push( ProjectCard::new(
         "#I12".to_string(),
@@ -157,7 +164,28 @@ fn main() {
         .add_tag(Tag::Event)
     );
     // __________________________________________________________________6 cards __________________________________________________________________________
-    
+    // 
+
+    custom_cards.push( ProjectCard::new(
+        "#I16".to_string(), 
+        Color::Blue, 
+        vec![Language::Hungarian("Kiskedvenc klónozás".to_string())], 
+        16, 
+        vec![
+            Language::Hungarian("Kötelező Akció: vegyél le egy mikróbát, egy palánta és egy energia erőforrást. Tegyél egy állatot bármely kártyádra. -1 VP minden állatod után ezen a kártyán".to_string())]
+        ).add_origin(Origin::Custom("Intrica".to_string())).add_origin(orig_auc)
+        .add_requirement(Requirement::Tag(vec![(Tag::Science, 2, MinMax::Min)]))
+        .add_on_card_actions(vec![
+            OnCardAction::ModifyProduction(Resource::Plant(3)),
+            OnCardAction::ModifyProduction(Resource::Energy(-1))])
+        .set_card_resource(CardResource::Animal(2))
+        .set_vp(VictoryPoint::PerResource(-1, CardResource::Animal(1)))
+        .add_motivational_quotes(vec![
+            Language::Hungarian("A klónozáshoz csupán 2 dolog kell. Energia és biomassza. Nagyon sok biomassza!".to_string()),
+            Language::English("You only need two things for cloning. Energy and biomass. A lot of biomass!".to_string())])
+
+    );
+
     custom_cards.push( ProjectCard::new(
         "#I17".to_string(),
         Color::Blue,
@@ -165,18 +193,12 @@ fn main() {
         vec![Language::Hungarian("Eget rengető tudományos felfedezés".to_string()), 
             Language::English("Groudbreaking scientific discovery".to_string())],
         25,
-        vec![Language::Hungarian("Hatás: Ha több mint 15 tudomény ikonod van, azonnal megnyered a játékot.".to_string()),
+        vec![Language::Hungarian("Hatás: Ha több mint 15 tudomány ikonod van, azonnal megnyered a játékot.".to_string()),
             Language::English("Effect: If you have more than 15 science tags, you win the game immediately.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string())).add_origin(orig_auc)
         .add_tag(Tag::Custom("Wonder".to_string()))
         .set_vp(VictoryPoint::PerTag(1, Tag::Science, 2))
-        .set_requironment(Requirement::Custom(Box::new(|game: Game| {
-            match game.current_player().tags().iter().filter(|(tag, _)| *tag == Tag::Science).next(){
-                Some((_, amount)) => *amount <= 10,
-                None => true,
-            }
-        })))
-        
+        .add_requirement(Requirement::Tag(vec![(Tag::Science, 10, MinMax::Max)]))
     );
     custom_cards.push( ProjectCard::new(
         "#I18".to_string(),
@@ -249,7 +271,7 @@ fn main() {
         vec![Language::Hungarian("Hatás:_Valahányszor lapot helyezel el A MARSON, kapsz egy palántát.".to_string()),
             Language::English("Effect: Whenever you place a tile on MARS, gain a plant.".to_string())],
         ).add_origin(Origin::Turmoil).add_origin(Origin::Custom("Ligvigfui extention".to_string()))
-        .set_requironment(Requirement::RulingParty(TurmoilParty::Greens))
+        .add_requirement(Requirement::RulingParty(TurmoilParty::Greens))
     );
     custom_cards.push( ProjectCard::new(
         "#L05".to_string(),
@@ -260,7 +282,7 @@ fn main() {
         vec![Language::Hungarian("Hatás: Minden épület 2 Mc-el kevesebbe kerül, Növeld a Mc termelésed 1-el".to_string()),
             Language::English("Effect: All buildings cost 2MC less, Increase your MC production 1 step.".to_string())],
         ).add_origin(Origin::Turmoil).add_origin(Origin::Custom("Ligvigfui extention".to_string()))
-        .set_requironment(Requirement::RulingParty(TurmoilParty::MarsFirst))
+        .add_requirement(Requirement::RulingParty(TurmoilParty::MarsFirst))
     );
     custom_cards.push( ProjectCard::new(
         "#L06".to_string(),

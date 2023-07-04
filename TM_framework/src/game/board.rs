@@ -11,9 +11,9 @@ pub enum MinMax {
 #[derive(Debug)]
 pub enum GlobalParameter {
     Temperature(i8),
-    Oxygen(u8),
-    Ocean(u8),
-    Venus(u8),
+    Oxygen(i8),
+    Ocean(i8),
+    Venus(i8),
 }
 
 #[derive(Debug)]

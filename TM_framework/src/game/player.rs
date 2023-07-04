@@ -82,7 +82,7 @@ pub struct Resources {
 
 impl Resources {
     pub fn modify_resources(&mut self, resource: Resource) -> Result<(), String>{
-        if !self.can_modify_resources(&resource) {return Err("Not enough resources".to_string());}
+        self.can_modify_resources(&resource)?;
 
         match resource {
             Resource::Money(m) => self.money = (self.money as i32 + m as i32) as u16,
@@ -95,23 +95,27 @@ impl Resources {
         Ok(())
     }
 
-    fn can_modify_resources(&self, resource: &Resource) -> bool {
-        match resource {
+    fn can_modify_resources(&self, resource: &Resource) -> Result<(), String> {
+        let result = match resource {
             Resource::Money(n) => self.money as i32 + *n as i32 >= 0,
             Resource::Steel(n) => self.steel as i32 + *n as i32 >= 0,
             Resource::Titanium(n) => self.titanium as i32 + *n as i32 >= 0,
             Resource::Plant(n) => self.plant as i32 + *n as i32 >= 0,
             Resource::Energy(n) => self.energy as i32 + *n as i32 >= 0,
             Resource::Heat(n) => self.heat as i32 + *n as i32 >= 0,
+        };
+        if result {Ok(())} 
+        else {
+            let error_text = format!("Not enough {:?}", resource);
+            Err(error_text)
         }
     }
 
-    fn remove_plant_upto(&mut self, resource: &Resource) -> Result<bool, String> {
+    fn can_remove_plant_upto(&mut self, resource: &Resource) -> Result<bool, String> {
         match resource {
             Resource::Plant(_) => Ok(self.plant > 0),
             _ => Err("Not a plant resource".to_string()),
         }
-
     }
 }
 
