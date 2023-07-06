@@ -1,10 +1,8 @@
 use std::collections::HashMap;
 
-use crate::*;
+use crate::{*, tile::{marsTile::*, *}};
 
 
-
-#[derive(Debug)]
 struct MarsMap {
     has_vulcanos: bool,
     has_noctis: bool,
@@ -252,8 +250,7 @@ impl MarsMap {
     }
 }
 
-
-impl Map for MarsMap {
+impl Map<MarsTile> for MarsMap {
     fn new() -> Self {
         MarsMap {
             has_vulcanos: true,
@@ -262,75 +259,27 @@ impl Map for MarsMap {
             coordinate_map: HashMap::new(),
         }
     }
-    fn add(mut self, x: i32, y: i32, tile: dyn map::Tile) -> Self {
+    fn add(mut self, x: i32, y: i32, tile: MarsTile) -> Self {
         self.coordinate_map.insert((x,y), self.tiles.len());
         self.tiles.push(tile);
         self
     }
 
-    fn get_mut(&mut self, x: i32, y: i32) -> Option<&mut dyn map::Tile> {
+    fn get_mut(&mut self, x: i32, y: i32) -> Option<&mut MarsTile> {
         let usize1 = self.coordinate_map.get(&(x,y))?;
         self.tiles.get_mut(*usize1)
     }
 
-    fn can_place_tile(&self, player: &Player, tile: &dyn map::Tile, x: i32, y: i32) -> Result<(), String> {
-        
-        
+    fn can_place_tile(&self, player: &Player, tile: &MarsTile, x: i32, y: i32) -> Result<(), String> {
         todo!();
         Ok(())
     }
 }
 
-#[derive(Debug)]
-pub struct MarsTile {
-    tile: MarsTileType,
-    reward: Vec<OnCardAction>,
-}
-
-impl Tile for MarsTile {}
-
-#[derive(Debug)]
-pub enum MarsTileType {
-    Land,
-    Vulcano(String),
-    ReservedOcean,
-    NoctisCityReserved,
-    Occupied(OccupiedTile),
-}
-
-#[derive(Debug)]
-pub struct OccupiedTile {
-    tile: OccupiedTileType,
-    owner_id: u8,
-}
-
-#[derive(Debug)]
-pub enum OccupiedTileType {
-    Ocean,
-    City,
-    Greenery,
-    Special(SpecialTile),
-}
-
-#[derive(Debug)]
-pub enum SpecialTile {
-    NaturalPreserve,
-    ExcavationSite,
-    CommercialDistrict,
-    NuclearZone,
-    IndustrialCenter,
-    EcologicalZone,
-    LavaFlows,
-    MoholeArea,
-    RestrictedArea,
-    Capital,
-    DeimosDown,
-    GreatDam,
-    MagneticFieldGenerator,
-}
-
 #[cfg(test)]
 mod tests {
+    use crate::tile::marsTile::MarsTile;
+
     use super::*;
 
 
