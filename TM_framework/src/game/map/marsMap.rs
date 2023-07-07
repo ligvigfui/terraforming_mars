@@ -2,6 +2,9 @@ use std::{collections::HashMap, vec};
 
 use crate::{*, tile::{marsTile::*}};
 
+pub mod baseMap;
+pub mod hellasMap;
+pub mod elysiumMap;
 
 struct MarsMap {
     has_vulcanos: bool,
