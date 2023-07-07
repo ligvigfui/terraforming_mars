@@ -3,6 +3,9 @@ use crate::*;
 use self::tile::*;
 
 pub mod marsMap;
+pub mod baseMap;
+pub mod hellasMap;
+pub mod elysiumMap;
 pub mod tile;
 
 
