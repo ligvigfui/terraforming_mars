@@ -1,4 +1,5 @@
-pub fn base_map() -> Self {
+impl marsMap {
+    pub fn base_map() -> Self {
         MarsMap::new().set_noctis(true)
             //row 1
             .add(-4, 4, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Steel(2))] })
@@ -72,4 +73,4 @@ pub fn base_map() -> Self {
             .add(3, -4, MarsTile { tile: MarsTileType::Land, reward: vec![] })
             .add(4, -4, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Titanium(2))] })
         }
-    
+}
