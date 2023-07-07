@@ -107,7 +107,7 @@ pub enum TurmoilParty {
 
 
 ///! TODO
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Icon {
     Icon(String),
 }

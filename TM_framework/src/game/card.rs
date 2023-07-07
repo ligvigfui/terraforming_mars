@@ -53,14 +53,35 @@ pub enum OnCardAction {
     MustRemoveFromAnyPlayersResources(Resource), 
     MustRemoveFromAnyPlayersProduction(Resource),
     RemoveFromAnyPlayersResources(Resource),
-    PlaceTile(OccupiedTileType),
-    RemoveTile(OccupiedTileType),
+    PlaceTile(PlaceableTileType),
+    RemoveTile(PlaceableTileType),
     ModifyTerraformRating(i8),
     ModifyGlobalParameter(GlobalParameter),
     ModifyCardResource(CardResource),
     PlaceColony,
     MoveDelegete,
     Custom(Box<dyn FnOnce(&mut Game) -> Result<(), String>>),
+}
+
+impl PartialEq for OnCardAction {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::BuyCard(l0), Self::BuyCard(r0)) => l0 == r0,
+            (Self::DrawCard(l0), Self::DrawCard(r0)) => l0 == r0,
+            (Self::Discard(l0), Self::Discard(r0)) => l0 == r0,
+            (Self::ModifyResources(l0), Self::ModifyResources(r0)) => l0 == r0,
+            (Self::ModifyProduction(l0), Self::ModifyProduction(r0)) => l0 == r0,
+            (Self::MustRemoveFromAnyPlayersResources(l0), Self::MustRemoveFromAnyPlayersResources(r0)) => l0 == r0,
+            (Self::MustRemoveFromAnyPlayersProduction(l0), Self::MustRemoveFromAnyPlayersProduction(r0)) => l0 == r0,
+            (Self::RemoveFromAnyPlayersResources(l0), Self::RemoveFromAnyPlayersResources(r0)) => l0 == r0,
+            (Self::PlaceTile(l0), Self::PlaceTile(r0)) => l0 == r0,
+            (Self::RemoveTile(l0), Self::RemoveTile(r0)) => l0 == r0,
+            (Self::ModifyTerraformRating(l0), Self::ModifyTerraformRating(r0)) => l0 == r0,
+            (Self::ModifyGlobalParameter(l0), Self::ModifyGlobalParameter(r0)) => l0 == r0,
+            (Self::ModifyCardResource(l0), Self::ModifyCardResource(r0)) => l0 == r0,
+            _ => core::mem::discriminant(self) == core::mem::discriminant(other),
+        }
+    }
 }
 
 impl fmt::Debug for OnCardAction {
@@ -145,7 +166,7 @@ pub enum Tag {
     Custom(String),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum CardResource {
     Microbe(i8),
     Animal(i8),

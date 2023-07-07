@@ -1,6 +1,5 @@
-use crate::OnCardAction;
-
-use super::Tile;
+use crate::*;
+use super::*;
 
 
 pub trait TMarsTile: Tile {
@@ -15,7 +14,7 @@ pub struct MarsTile {
 
 impl Tile for MarsTile {}
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum MarsTileType {
     Land,
     Vulcano(String),
@@ -24,21 +23,32 @@ pub enum MarsTileType {
     Occupied(OccupiedTile),
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct OccupiedTile {
-    tile: OccupiedTileType,
-    owner_id: u8,
+    pub(crate) tile: PlaceableTileType,
+    pub(crate) owner_id: u8,
 }
 
-#[derive(Debug)]
-pub enum OccupiedTileType {
+impl OccupiedTile {
+    pub fn new() -> Self {
+        Self {
+            tile: PlaceableTileType::Ocean,
+            owner_id: 0,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq)]
+pub enum PlaceableTileType {
     Ocean,
     City,
     Greenery,
     Special(SpecialTile),
 }
 
-#[derive(Debug)]
+impl PlaceableTile for PlaceableTileType {}
+
+#[derive(Debug, PartialEq)]
 pub enum SpecialTile {
     NaturalPreserve,
     ExcavationSite,

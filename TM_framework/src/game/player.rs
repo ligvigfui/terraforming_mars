@@ -21,6 +21,22 @@ pub struct Player {
 
 
 impl Player {
+    pub fn new() -> Self {
+        Player {
+            id: 0,
+            name: "".to_string(),
+            hand: Vec::new(),
+            played_cards: Vec::new(),
+            corporation: Vec::new(),
+            prelude: Vec::new(),
+            production: Production::new(),
+            resources: Resources::new(),
+            tags: Vec::new(),
+            vp: 0,
+            terraform_rating: 20,
+            actions: 2,
+        }
+    }
     pub fn hand(&self) -> &Vec<ProjectCard> {
         &self.hand
     }
@@ -45,6 +61,16 @@ pub struct Production {
 }
 
 impl Production {
+    pub fn new() -> Self {
+        Production {
+            money: 0,
+            steel: 0,
+            titanium: 0,
+            plant: 0,
+            energy: 0,
+            heat: 0,
+        }
+    }
     pub fn modify_production(&mut self, resource: Resource) -> Result<(), String>{
         if !self.can_modify_production(&resource) {return Err("Not enough resources".to_string());}
 
@@ -81,6 +107,17 @@ pub struct Resources {
 }
 
 impl Resources {
+    pub fn new() -> Self {
+        Resources {
+            money: 0,
+            steel: 0,
+            titanium: 0,
+            plant: 0,
+            energy: 0,
+            heat: 0,
+        }
+    }
+
     pub fn modify_resources(&mut self, resource: Resource) -> Result<(), String>{
         self.can_modify_resources(&resource)?;
 
@@ -120,7 +157,7 @@ impl Resources {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum Resource {
     Money(i16),
     Steel(i16),

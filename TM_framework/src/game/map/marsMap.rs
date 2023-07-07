@@ -1,6 +1,6 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, vec};
 
-use crate::{*, tile::{marsTile::*, *}};
+use crate::{*, tile::{marsTile::*}};
 
 
 struct MarsMap {
@@ -11,18 +11,28 @@ struct MarsMap {
 }
 
 impl MarsMap {
-    fn vulcanos(mut self, has_vulcanos: bool) -> Self {
+    fn set_vulcanos(mut self, has_vulcanos: bool) -> Self {
         self.has_vulcanos = has_vulcanos;
         self
     }
 
-    fn noctis(mut self, has_noctis: bool) -> Self {
+    fn set_noctis(mut self, has_noctis: bool) -> Self {
         self.has_noctis = has_noctis;
         self
     }
 
+    fn filter_tiles(&self, predicate: impl Fn(&MarsTile) -> bool) -> Vec<(i32, i32)> {
+        let mut result = vec![];
+        for ((x, y), tile_id) in self.coordinate_map.iter() {
+            if predicate(&self.tiles[*tile_id]) {
+                result.push((*x, *y));
+            }
+        }
+        result
+    }
+
     pub fn base_map() -> Self {
-        MarsMap::new().noctis(true)
+        MarsMap::new().set_noctis(true)
             //row 1
             .add(-4, 4, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Steel(2))] })
             .add(-3, 4, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Steel(2))] })
@@ -43,7 +53,7 @@ impl MarsMap {
             .add(-1, 2, MarsTile { tile: MarsTileType::Land, reward: vec![] })
             .add(0, 2, MarsTile { tile: MarsTileType::Land, reward: vec![] })
             .add(1, 2, MarsTile { tile: MarsTileType::Land, reward: vec![] })
-            .add(2, 2, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Steel(1))] })
+            .add(2, 2, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Steel(1))] })
             //row 4
             .add(-4, 1, MarsTile { tile: MarsTileType::Vulcano("Pavonis Mons".to_string()), 
                 reward: vec![OnCardAction::ModifyResources(Resource::Plant(1)), OnCardAction::ModifyResources(Resource::Titanium(1))] })
@@ -63,7 +73,7 @@ impl MarsMap {
             .add(1, 0, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
             .add(2, 0, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
             .add(3, 0, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
-            .add(4, 0, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
+            .add(4, 0, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
             //row 6
             .add(-3, -1, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(1))] })
             .add(-2, -1, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
@@ -96,7 +106,7 @@ impl MarsMap {
             .add(4, -4, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Titanium(2))] })
         }
     pub fn hellas_map() -> Self {
-        MarsMap::new().vulcanos(false)
+        MarsMap::new().set_vulcanos(false)
             //row 1
             .add(-4, 4, MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
             .add(-3, 4, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] })
@@ -168,7 +178,7 @@ impl MarsMap {
             .add(0, -4, MarsTile { tile: MarsTileType::Land, reward: vec![] })
             .add(1, -4, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Heat(2))] })
             .add(2, -4, MarsTile { tile: MarsTileType::Land, reward: vec![
-                OnCardAction::ModifyResources(Resource::Money(-5)), OnCardAction::PlaceTile(OccupiedTileType::Ocean)] })
+                OnCardAction::ModifyResources(Resource::Money(-5)), OnCardAction::PlaceTile(PlaceableTileType::Ocean)] })
             .add(3, -4, MarsTile { tile: MarsTileType::Land, reward: vec![OnCardAction::ModifyResources(Resource::Heat(2))] })
             .add(4, -4, MarsTile { tile: MarsTileType::Land, reward: vec![] })
     }
@@ -250,7 +260,7 @@ impl MarsMap {
     }
 }
 
-impl Map<MarsTile> for MarsMap {
+impl Map<MarsTile, PlaceableTileType> for MarsMap {
     fn new() -> Self {
         MarsMap {
             has_vulcanos: true,
@@ -270,9 +280,24 @@ impl Map<MarsTile> for MarsMap {
         self.tiles.get_mut(*usize1)
     }
 
-    fn can_place_tile(&self, player: &Player, tile: &MarsTile, x: i32, y: i32) -> Result<(), String> {
+    fn where_can_place_tile(&self, player: &Player, tile: &PlaceableTileType) -> Vec<(i32, i32)> {
+        let mut places: Vec<(i32, i32)> =  Vec::new();
+        match tile {
+            PlaceableTileType::Ocean => {
+                for ((x, y), tile_id) in self.coordinate_map.iter() {
+                    if self.tiles[*tile_id].tile == MarsTileType::ReservedOcean {
+                        places.push((*x, *y));
+                    }
+                }
+            }
+            PlaceableTileType::City => {
+                self.coordinate_map.iter().filter(predicate)
+            }
+            PlaceableTileType::Greenery => {}
+            PlaceableTileType::Special(_) => {}
+        }
         todo!();
-        Ok(())
+        vec![]
     }
 }
 
@@ -285,7 +310,7 @@ mod tests {
 
     #[test]
     fn test_modify_vulcanos() {
-        let map = MarsMap::new().vulcanos(false);
+        let map = MarsMap::new().set_vulcanos(false);
         assert!(!map.has_vulcanos)
     }
 
@@ -299,5 +324,19 @@ mod tests {
         let tile = MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] };
         assert_eq!(to_string(point), to_string(tile));
         
+    }
+
+    #[test]
+    fn test_filter_tiles() {
+        let map = MarsMap::base_map();
+        let mut tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::ReservedOcean);
+        assert_eq!(tiles.len(), 12);
+        assert!(tiles.contains(&(-3, 4)));
+        tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::NoctisCityReserved);
+        assert!(tiles.contains(&(-2, 0)));
+        tiles = map.filter_tiles(|tile| tile.reward == vec![OnCardAction::ModifyResources(Resource::Titanium(1)), OnCardAction::ModifyResources(Resource::Plant(1))]);
+        assert!(tiles.contains(&(-4, 1)));
+        tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::Occupied(OccupiedTile{ tile: PlaceableTileType::City, owner_id: 0}));
+
     }
 }

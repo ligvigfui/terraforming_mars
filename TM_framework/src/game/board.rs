@@ -8,7 +8,7 @@ pub enum MinMax {
     Max,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum GlobalParameter {
     Temperature(i8),
     Oxygen(i8),
