@@ -1,4 +1,4 @@
-use self::{player::Player, card::project::ProjectCard, milestone::Milestone, award::{Award, AwardRules}};
+use crate::*;
 
 pub mod card;
 pub mod player;
@@ -34,6 +34,7 @@ enum Phase {
     WorldGovernmentTerraforming,
     ColonyProduction,
     Turmoil,
+    Custom(String),
     NextPlayer,
 }
 
@@ -58,16 +59,16 @@ pub struct Game {
     players: Vec<Player>,
     deck: Vec<ProjectCard>,
     discard: Vec<ProjectCard>,
-    current_player: usize,
-    generation: usize,
+    current_player: u8,
+    generation: u8,
     map: String,
-    temperature: i32,
-    oxygen: usize,
-    ocean: usize,
-    venus: usize,
+    temperature: i8,
+    oxygen: u8,
+    ocean: u8,
+    venus: u8,
     milestones: Vec<Milestone>,
     awards: Vec<Award>,
-    phase: String,
+    phase: Phase,
     history: String,
 }
 
@@ -76,17 +77,21 @@ impl Game {
         &self.players[self.current_player as usize]
     }
     pub fn next_player(&mut self) {
-        self.current_player = (self.current_player + 1) % self.players.len();
+        self.current_player = (self.current_player + 1) % self.players.len() as u8;
     }
 
 }
 
 
 pub struct Rules {
+    actions_per_turn: u8,
     award_rules: AwardRules,
+    prelude: bool,
+    map: Maps,
+    venus_next: bool,
+    colonies: bool,
+    turmoil: bool,
 }
-
-
 
 #[derive(Debug)]
 pub enum Language {
@@ -105,9 +110,9 @@ pub enum TurmoilParty {
     MarsFirst,
 }
 
-
-///! TODO
-#[derive(Debug, PartialEq)]
-pub enum Icon {
-    Icon(String),
+#[derive(Debug)]
+pub enum VictoryPoint {
+    VP(i8),
+    PerTag(i8, Tag, u8),
+    PerResource(i8, CardResource),
 }

@@ -1,4 +1,4 @@
-use super::{*, card::{project::ProjectCard, Tag, prelude::Prelude, corporation::Corporation}};
+use crate::*;
 
 
 #[derive(Debug)]
@@ -157,7 +157,7 @@ impl Resources {
 }
 
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Resource {
     Money(i16),
     Steel(i16),

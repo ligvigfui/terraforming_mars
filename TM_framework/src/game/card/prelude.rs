@@ -1,5 +1,5 @@
 
-use crate::game::Language;
+use crate::*;
 
 #[derive(Debug)]
 pub struct Prelude {

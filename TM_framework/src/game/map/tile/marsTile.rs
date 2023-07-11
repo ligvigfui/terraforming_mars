@@ -1,12 +1,13 @@
+use std::slice::Iter;
+
 use crate::*;
-use super::*;
 
 
 pub trait TMarsTile: Tile {
     
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MarsTile {
     pub(crate) tile: MarsTileType,
     pub(crate) reward: Vec<OnCardAction>,
@@ -14,7 +15,7 @@ pub struct MarsTile {
 
 impl Tile for MarsTile {}
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum MarsTileType {
     Land,
     Vulcano(String),
@@ -23,7 +24,7 @@ pub enum MarsTileType {
     Occupied(OccupiedTile),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct OccupiedTile {
     pub(crate) tile: PlaceableTileType,
     pub(crate) owner_id: u8,
@@ -38,7 +39,7 @@ impl OccupiedTile {
     }
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum PlaceableTileType {
     Ocean,
     City,
@@ -48,7 +49,7 @@ pub enum PlaceableTileType {
 
 impl PlaceableTile for PlaceableTileType {}
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum SpecialTile {
     NaturalPreserve,
     ExcavationSite,

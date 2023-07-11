@@ -1,6 +1,6 @@
-use std::{collections::HashMap, vec};
+use std::{collections::{HashMap, HashSet}, vec};
 
-use crate::{*, tile::{marsTile::*}};
+use crate::*;
 
 pub mod baseMap;
 pub mod hellasMap;
@@ -22,16 +22,6 @@ impl MarsMap {
     fn set_noctis(mut self, has_noctis: bool) -> Self {
         self.has_noctis = has_noctis;
         self
-    }
-
-    fn filter_tiles(&self, predicate: impl Fn(&MarsTile) -> bool) -> Vec<(i32, i32)> {
-        let mut result = vec![];
-        for ((x, y), tile_id) in self.coordinate_map.iter() {
-            if predicate(&self.tiles[*tile_id]) {
-                result.push((*x, *y));
-            }
-        }
-        result
     }
 }
 
@@ -57,29 +47,54 @@ impl Map<MarsTile, PlaceableTileType> for MarsMap {
 
     fn where_can_place_tile(&self, player: &Player, tile: &PlaceableTileType) -> Vec<(i32, i32)> {
         let mut places: Vec<(i32, i32)> =  Vec::new();
+        let (filtered_coordinate_map, filtered_tiles) = 
+            self.on_before_where_can_place_tile(player, tile);
+        
         match tile {
             PlaceableTileType::Ocean => {
-                for ((x, y), tile_id) in self.coordinate_map.iter() {
-                    if self.tiles[*tile_id].tile == MarsTileType::ReservedOcean {
+                for ((x, y), tile_id) in filtered_coordinate_map.iter() {
+                    if filtered_tiles[*tile_id].tile == MarsTileType::ReservedOcean {
                         places.push((*x, *y));
                     }
                 }
             }
             PlaceableTileType::City => {
-                self.coordinate_map.iter().filter(predicate)
+                let mut hashset = HashSet::new();
+                filtered_coordinate_map.iter().filter(|(_, &tile_id)|
+                    match filtered_tiles[tile_id].tile {
+                        MarsTileType::Land => true,
+                        MarsTileType::Vulcano(_) => true,
+                        _ => false
+                }).for_each(|(&(x, y), _)| { hashset.insert((x, y)); });
+
+                filtered_coordinate_map.iter().filter(|(_, &tile_id)|
+                    match filtered_tiles[tile_id].tile {
+                        MarsTileType::Occupied(OccupiedTile { tile: PlaceableTileType::City, owner_id: _, }) => true,
+                        _ => false
+                }).for_each(|(&city_tile_coord, _)| 
+                    for nearby_city_tiles in next_to(city_tile_coord).iter(){
+                        hashset.remove(nearby_city_tiles);
+                });
+                places = hashset.into_iter().collect();
             }
-            PlaceableTileType::Greenery => {}
+            PlaceableTileType::Greenery => {
+                
+            }
             PlaceableTileType::Special(_) => {}
         }
         todo!();
         vec![]
     }
+
+    fn on_before_where_can_place_tile(&self, player: &Player, tile: &PlaceableTileType) -> (HashMap<(i32, i32), usize>, Vec<MarsTile>) {
+        
+        todo!("remove standard return");
+        (self.coordinate_map.clone(), self.tiles.clone())
+    }
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::tile::marsTile::MarsTile;
-
     use super::*;
 
 
@@ -99,19 +114,5 @@ mod tests {
         let tile = MarsTile { tile: MarsTileType::ReservedOcean, reward: vec![OnCardAction::ModifyResources(Resource::Plant(2))] };
         assert_eq!(to_string(point), to_string(tile));
         
-    }
-
-    #[test]
-    fn test_filter_tiles() {
-        let map = MarsMap::base_map();
-        let mut tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::ReservedOcean);
-        assert_eq!(tiles.len(), 12);
-        assert!(tiles.contains(&(-3, 4)));
-        tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::NoctisCityReserved);
-        assert!(tiles.contains(&(-2, 0)));
-        tiles = map.filter_tiles(|tile| tile.reward == vec![OnCardAction::ModifyResources(Resource::Titanium(1)), OnCardAction::ModifyResources(Resource::Plant(1))]);
-        assert!(tiles.contains(&(-4, 1)));
-        tiles = map.filter_tiles(|tile| tile.tile == MarsTileType::Occupied(OccupiedTile{ tile: PlaceableTileType::City, owner_id: 0}));
-
     }
 }

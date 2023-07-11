@@ -1,11 +1,11 @@
-use crate::{OnCardAction, Card, Player};
+use crate::*;
 
 
 #[derive(Debug)]
 pub struct Action {
     played_this_generation: bool,
     cost: Vec<OnCardAction>,
-    reward: Vec<OnCardAction>
+    reward: Vec<OnCardAction>,
 }
 
 impl Card for Action {

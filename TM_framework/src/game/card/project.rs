@@ -1,6 +1,4 @@
-use crate::{game::{Language, Origin, TurmoilParty, Game}, action::Action};
-
-use super::*;
+use crate::*;
 
 
 
@@ -33,7 +31,7 @@ pub struct ProjectCard {
     action: Vec<Action>,
     effect: Vec<Effect>,
     on_card_action: Option<Vec<OnCardAction>>,
-    vp: VictoryPoint,
+    vp: Option<VictoryPoint>,
     motivational_quote: Option<Vec<Language>>,
     bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
     origin: Vec<Origin>
@@ -41,13 +39,13 @@ pub struct ProjectCard {
 
 //setup implementation
 impl ProjectCard {
-    pub fn new(id: String, color: Color, name: Vec<Language>, cost: i32, effects: Vec<Language>) -> ProjectCard {
+    pub fn new(id: String, color: Color, name: Vec<Language>, cost: i32, effect_discription: Vec<Language>) -> ProjectCard {
         ProjectCard {
             id,
             color,
             name,
             cost,
-            vp: VictoryPoint::None,
+            vp: None,
             tags: Vec::new(),
             requirements: None,
             card_resource: None,
@@ -55,7 +53,7 @@ impl ProjectCard {
             on_card_action: None,
             motivational_quote: None,
             origin: Vec::new(),
-            effect_discription: Vec::new(),
+            effect_discription,
             action: Vec::new(),
             effect: Vec::new(),
         }
@@ -88,7 +86,7 @@ impl ProjectCard {
         self
     }
     pub fn set_vp(mut self, vp: VictoryPoint)-> Self{
-        self.vp = vp;
+        self.vp = Some(vp);
         self
     }
     pub fn add_tag(mut self, tag: Tag)-> Self{
@@ -138,7 +136,7 @@ impl PartialEq for ProjectCard {
 }
 
 
-
+#[derive(Debug)]
 pub enum Requirement {
     Tag(Vec<(Tag, usize, MinMax)>),
     Production(Resource),
@@ -150,49 +148,5 @@ pub enum Requirement {
     Chairman,
     RulingParty(TurmoilParty),
     TwoPartyLeaders,
-    Custom(Box<dyn Fn(&Game) -> Result<(), String>>),
-}
-
-impl std::fmt::Debug for Requirement {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        match self {
-            Requirement::Tag(tags) => {
-                let mut s = String::new();
-                for (tag, amount, minmax) in tags {
-                    s.push_str(&format!("{} {:?} {:?}, ", amount, minmax, tag));
-                }
-                write!(f, "{}", s)
-            },
-            Requirement::Production(resource) => {
-                write!(f, "{:?}", resource)
-            },
-            Requirement::Tile(tile) => {
-                write!(f, "{}", tile)
-            },
-            Requirement::GlobalParameter(parameter, minmax) => {
-                write!(f, "{:?} {:?}", minmax, parameter)
-            },
-            Requirement::TR(amount, minmax) => {
-                write!(f, "{:?} {}", minmax, amount)
-            },
-            Requirement::CardResource(card_resource, amount) => {
-                write!(f, "{} {:?}", amount, card_resource)
-            },
-            Requirement::Colony(minmax) => {
-                write!(f, "{:?}", minmax)
-            },
-            Requirement::Chairman => {
-                write!(f, "Chairman")
-            },
-            Requirement::RulingParty(party) => {
-                write!(f, "{:?}", party)
-            },
-            Requirement::TwoPartyLeaders => {
-                write!(f, "TwoPartyLeaders")
-            },
-            Requirement::Custom(_) => {
-                write!(f, "Custom")
-            },
-        }
-    }
-}
+    Custom(fn(&'static Game) -> Result<(), String>),
+} 

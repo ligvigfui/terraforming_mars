@@ -1,6 +1,6 @@
 use core::fmt;
 
-use crate::{*, tile::marsTile::*};
+use crate::*;
 
 
 
@@ -33,14 +33,9 @@ pub trait Card: Sized {
 pub struct Effect {
     criteria: Vec<OnCardAction>,
     reward: OnCardAction,
-    prelude: prelude::Prelude,
 }
 
-#[derive(Debug)]
-pub enum CardPhase {
-
-}
-
+#[derive(Clone)]
 pub enum OnCardAction {
     // move card from research to hand
     BuyCard(u8),
@@ -60,7 +55,7 @@ pub enum OnCardAction {
     ModifyCardResource(CardResource),
     PlaceColony,
     MoveDelegete,
-    Custom(Box<dyn FnOnce(&mut Game) -> Result<(), String>>),
+    Custom(fn(&mut Game) -> Result<(), String>),
 }
 
 impl PartialEq for OnCardAction {
@@ -140,14 +135,6 @@ impl fmt::Debug for OnCardAction {
 }
 
 
-#[derive(Debug)]
-pub enum VictoryPoint {
-    None,
-    VP(i8),
-    PerTag(i8, Tag, u8),
-    PerResource(i8, CardResource),
-}
-
 #[derive(Debug, PartialEq)]
 pub enum Tag {
     Building,
@@ -166,7 +153,7 @@ pub enum Tag {
     Custom(String),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum CardResource {
     Microbe(i8),
     Animal(i8),
@@ -175,5 +162,5 @@ pub enum CardResource {
     Asteroid(i8),
     Data(i8),
     Radtiation(i8),
-    Custom(String, Icon, i8),
+    Custom(String, Picture, i8),
 }

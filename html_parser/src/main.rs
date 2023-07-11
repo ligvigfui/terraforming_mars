@@ -2,7 +2,7 @@
 
 use std::vec;
 
-use TM_framework::Game::{Card::Project::{ProjectCard, Color}, Language};
+use TM_framework::*;
 
 
 
@@ -39,9 +39,7 @@ fn main() {
 //create tests
 #[cfg(test)]
 mod tests {
-    use TM_framework::Game::{Card::{Project::Requirement, OnCardAction, Tag, VictoryPoint}, Origin, MinMax};
-
-    use crate::*;
+    use super::*;
         
 
 
@@ -75,7 +73,7 @@ mod tests {
             7,
             vec![Language::English("(Requires Venus, Earth and Jovian tags. Draw 2 cards).".to_string())],
         ).add_origin(Origin::VenusNext)
-        .set_requironment(Requirement::Tag(vec![
+        .add_requirement(Requirement::Tag(vec![
             (Tag::Venus, 1, MinMax::Min),
             (Tag::Earth, 1, MinMax::Min),
             (Tag::Jovian, 1, MinMax::Min),

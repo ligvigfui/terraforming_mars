@@ -9,12 +9,12 @@ use TM_framework::*;
 
 
 fn main() {
-    println!("Hello, world! {}", version);
+    println!("Hello, world! {}", VERSION);
     let mut input = String::new();
     std::io::stdin().read_line(&mut input).unwrap();
 
 
-    // max 64 card / expansion
+    // max 99 card / expansion
 
     let orig_auc = Origin::Custom("Auction".to_string());
 
@@ -62,7 +62,7 @@ fn main() {
         vec![Language::Hungarian("Akció: költs el 2 acél erőforrást, majd tegyél egy drónt erre a lapra VAGY költs el X (maximum annyi energia erőforrást, ahány drón van ezen a lapon), majd vegyél magadhoz 2X palánta erőforrást".to_string()),
             Language::English("Action: Spend 2 steel resources to add a drone to this card OR spend X energy (maximum drone number) to add 2X plants to your inventory.".to_string())],
         ).add_tags(vec![Tag::Building, Tag::Plant])
-        .set_card_resource(CardResource::Custom("drone".to_string(), Icon::Icon("drone".to_string()), 0))
+        .set_card_resource(CardResource::Custom("drone".to_string(), Picture { path: "drone".to_string() }, 0))
         .add_origin(Origin::Custom("Intrica".to_string()))
         .set_vp(VictoryPoint::VP(1))
     );
