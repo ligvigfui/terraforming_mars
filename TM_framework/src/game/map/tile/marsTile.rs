@@ -1,16 +1,12 @@
-use std::slice::Iter;
-
 use crate::*;
 
 
-pub trait TMarsTile: Tile {
-    
-}
+pub trait TMarsTile: Tile {}
 
 #[derive(Debug, Clone)]
 pub struct MarsTile {
-    pub(crate) tile: MarsTileType,
-    pub(crate) reward: Vec<OnCardAction>,
+    pub tile: MarsTileType,
+    pub reward: Vec<OnCardAction>,
 }
 
 impl Tile for MarsTile {}
@@ -39,29 +35,11 @@ impl OccupiedTile {
     }
 }
 
+impl PlaceableTile for PlaceableTileType {}
 #[derive(Debug, PartialEq, Clone)]
 pub enum PlaceableTileType {
     Ocean,
     City,
     Greenery,
-    Special(SpecialTile),
-}
-
-impl PlaceableTile for PlaceableTileType {}
-
-#[derive(Debug, PartialEq, Clone)]
-pub enum SpecialTile {
-    NaturalPreserve,
-    ExcavationSite,
-    CommercialDistrict,
-    NuclearZone,
-    IndustrialCenter,
-    EcologicalZone,
-    LavaFlows,
-    MoholeArea,
-    RestrictedArea,
-    Capital,
-    DeimosDown,
-    GreatDam,
-    MagneticFieldGenerator,
+    Custom(CustomTile),
 }

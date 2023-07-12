@@ -45,11 +45,11 @@ impl Map<MarsTile, PlaceableTileType> for MarsMap {
         self.tiles.get_mut(*usize1)
     }
 
-    fn where_can_place_tile(&self, player: &Player, tile: &PlaceableTileType) -> Vec<(i32, i32)> {
+    fn where_can_place_tile(&self, player_id: &u8, tile: &PlaceableTileType) -> Vec<(i32, i32)> {
         let mut places: Vec<(i32, i32)> =  Vec::new();
         let (filtered_coordinate_map, filtered_tiles) = 
-            self.on_before_where_can_place_tile(player, tile);
-        
+            self.on_before_where_can_place_tile(player_id, tile);
+
         match tile {
             PlaceableTileType::Ocean => {
                 for ((x, y), tile_id) in filtered_coordinate_map.iter() {
@@ -69,6 +69,7 @@ impl Map<MarsTile, PlaceableTileType> for MarsMap {
 
                 filtered_coordinate_map.iter().filter(|(_, &tile_id)|
                     match filtered_tiles[tile_id].tile {
+                        //? is this correct?
                         MarsTileType::Occupied(OccupiedTile { tile: PlaceableTileType::City, owner_id: _, }) => true,
                         _ => false
                 }).for_each(|(&city_tile_coord, _)| 
@@ -78,15 +79,38 @@ impl Map<MarsTile, PlaceableTileType> for MarsMap {
                 places = hashset.into_iter().collect();
             }
             PlaceableTileType::Greenery => {
-                
+                // gets tiles next to player placed cards
+                for (&(x, y), &tile_id) in filtered_coordinate_map.iter() {
+                    match &filtered_tiles[tile_id].tile {
+                        MarsTileType::Land | MarsTileType::Vulcano(_) => {
+                            for neighbour_tile in next_to((x,y)){
+                                match &filtered_tiles[filtered_coordinate_map[&neighbour_tile]].tile {
+                                    MarsTileType::Occupied(OccupiedTile { tile: _, owner_id }) 
+                                        if owner_id == player_id => {places.push((x,y)); break;},
+                                    _ => {}
+                                }
+                            }
+                        }
+                        _ => {}
+                    }
+                }
+                // reurns all empty places if places is empty.
+                if places.len() == 0 {
+                    return filtered_coordinate_map.iter().filter(|(_, &tile_id)|
+                        match filtered_tiles[tile_id].tile {
+                            MarsTileType::Land => true,
+                            MarsTileType::Vulcano(_) => true,
+                            _ => false
+                    }).map(|(&(x, y), _)| (x, y)).collect();
+                }
             }
-            PlaceableTileType::Special(_) => {}
+            _ => {}
         }
         todo!();
         vec![]
     }
 
-    fn on_before_where_can_place_tile(&self, player: &Player, tile: &PlaceableTileType) -> (HashMap<(i32, i32), usize>, Vec<MarsTile>) {
+    fn on_before_where_can_place_tile(&self, player_id: &u8, tile: &PlaceableTileType) -> (HashMap<(i32, i32), usize>, Vec<MarsTile>) {
         
         todo!("remove standard return");
         (self.coordinate_map.clone(), self.tiles.clone())

@@ -1,16 +1,18 @@
 #![allow(dead_code)]
 #![allow(unreachable_code)]
 
-pub use crate::{
-    game::{*, 
+pub use crate::game::{*, 
         map::{*, 
+            tile::{*,
+                marsTile::*,
+                spaceTile::*,
+                customTile::*,},
             marsMap::{*, 
                 baseMap::*, 
                 hellasMap::*, 
-                elysiumMap::*}, 
-            tile::{*,
-                marsTile::*}},
-        card::{*, 
+                elysiumMap::*},
+            spaceMap::*,},
+        card::{*,
             action::*,
             corporation::*, 
             prelude::*, 
@@ -20,7 +22,7 @@ pub use crate::{
         award::*,
         board::*,
         milestone::*, 
-        player::*}};
+        player::*};
 
 pub mod game;
 

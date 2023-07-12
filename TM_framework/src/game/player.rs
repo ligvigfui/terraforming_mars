@@ -3,7 +3,7 @@ use crate::*;
 
 #[derive(Debug)]
 pub struct Player {
-    id: u8,
+    pub id: u8,
     name: String,
     //make hand able to hold copr and prelude too
     hand: Vec<ProjectCard>,
