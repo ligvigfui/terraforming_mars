@@ -17,6 +17,7 @@ fn main() {
     // max 99 card / expansion
 
     let orig_auc = Origin::Custom("Auction".to_string());
+    let orig_intr = Origin::Custom("Intrica".to_string());
 
     let mut custom_cards = Vec::new();
     custom_cards.push(ProjectCard::new(
@@ -96,9 +97,9 @@ fn main() {
         vec![Language::Hungarian("Nem etikus állatkísérletek".to_string()),
             Language::English("Unethical animal testing".to_string())],
         5,
-        vec![Language::Hungarian("Minden játékos akinek van állat vagy ? ikonja felfedi egy kártyáját, vásárolj meg ezekből bármennyit 1MC-ért".to_string()),
-            Language::English("Each player with an animal or wild tag reveals a card from their hand, then you may buy any number of them for 1MC each.".to_string())],
-        ).add_origin(Origin::Custom("Intrica".to_string()))
+        vec![Language::Hungarian("Minden játékos akinek van állat vagy ? ikonja felfedi 2 kártyáját, vásárolj meg ezekből bármennyit 1MC-ért".to_string()),
+            Language::English("Each player with an animal or wild tag reveals 2 cards from their hand, then you may buy any number of them for 1MC each.".to_string())],
+        ).add_origin(orig_intr).add_origin(orig_auc)
         .add_tag(Tag::Science)
         .set_vp(VictoryPoint::VP(-1))
     );
@@ -108,8 +109,8 @@ fn main() {
         vec![Language::Hungarian("Közös kutatás".to_string()),
             Language::English("Joint research".to_string())],
         6,
-        vec![Language::Hungarian("Minden játékos rajtad kívül húz egy kártyát. Ezt vagy megveszi 3MC-ért, vagy a kezedbe adja. Ezután húzz (5-kapott) kártyát, majd ebből egyet a kezedbe vehetsz, dobd el a többit.".to_string()),
-            Language::English("Each player draws a card, then either buys it for 3MC or gives it to you. Then draw (5-recived) cards, chose 1 and discard the rest.".to_string())],
+        vec![Language::Hungarian("Minden játékos rajtad kívül húz egy kártyát. Ezt vagy megveszi 3MC-ért, vagy a kezedbe adja. Ezután egészítsd ki 5-re a kapott kártya mennyiséget, majd ebből egyet a kezedbe vehetsz, dobd el a többit.".to_string()),
+            Language::English("Each player draws a card, then either buys it for 3MC or gives it to you. Then draw cards untill you have 5 in your hand with the recived ones, add 1 to your hand and discard the rest.".to_string())],
         ).add_origin(Origin::Custom("Intrica".to_string()))
         .add_tags(vec![Tag::Science, Tag::Science])
     );
@@ -211,9 +212,21 @@ fn main() {
         ).add_origin(Origin::Custom("Intrica".to_string()))
     );
 
+    // __________________________________________________________________6 cards __________________________________________________________________________
+
+    custom_cards.push(ProjectCard::new(
+        "#I22".to_owned(), 
+        Color::Blue, 
+        vec![], 
+        12,
+        vec![Language::Hungarian("Amikor BÁRMILYEN kártyát húzol, húzz egyel többet, de dobj el egyet a húzottak közül, mielőtt a kezedbe vennéd amit kiválsztottál".to_string()),
+            Language::English("When you draw ANY cards, draw 1 extra, then discard 1 from the drawn, before you buy / take them".to_string())]
+        ).add_origin(orig_intr).add_origin(Origin::CorporateEra)
+        .add_tag(Tag::Science)
+    );
 
     // __________________________________________________________________6 cards __________________________________________________________________________
-    // _____________________________________________________________Turmoil extended____________________________________________________________________
+    // _____________________________________________________________Turmoil extended_______________________________________________________________________
     // one more of these cards with other extensions:
     // scientist, kelvinist, unity
     // type of cards: base(extensions)
