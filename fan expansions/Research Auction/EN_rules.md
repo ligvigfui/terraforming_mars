@@ -15,11 +15,9 @@ version: 1.1
     1. Bidding on ANY type of cards
     2. Evaluating Company cards
     3. Passing on the starting player
-
     4. Bidding on Prelude and Project cards
     5. Evaluating Prelude cards
     6. Passing on the starting player
-
     7. Bidding on Project cards
     8. Evaluating Project cards
     9. Passing on the starting player
@@ -70,6 +68,6 @@ Example:
 - Anne got 2 Companies. She must choose one (since you have one company) and discard the other.
 - After recieving the money from the Company starting amount she pais the amount (3M€) she won the bids with reduced by 2 (1 for each Company) for a total of 1M€.
 
-### Other changes
+## Other changes
 
 - The effect of the Terralab company is supplemented as follows: "When you take a card in front of you, pay one less for your bid."
