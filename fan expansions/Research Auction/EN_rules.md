@@ -22,9 +22,9 @@ version: 1.1
 
 ### Research (at the start of every generation)
 
-1. Spread out player*4 Project cards face up on the table
-2. [Bid](#bidding) on the cards
-3. [Evaluate](#evaluation-distribution-of-the-cards) the Project cards
+0. Spread out player*4 Project cards face up on the table
+1. [Bid](#bidding) on the cards
+2. [Evaluate](#evaluation-distribution-of-the-cards) the Project cards
 
 ## Card distribution rules
 
@@ -39,14 +39,15 @@ version: 1.1
 
 ### Evaluation (distribution) of the cards
 
-1. Start evaluating from the card with the most total markers on it to the card with the least markers
-    1. In reading order
-    2. From right to left
-    3. From top to bottom
-2. In case of a tie
-    1. The player with fewer cards in front of them has priority
-    2. The player sitting closer to the first player in the round has priority
-    3. If a card has no markers, it is immediately placed on the discard pile
+- Start evaluating
+    1. From the card with the most amount of total markers on it to the card with the least markers
+    2. In reading order
+        1. From right to left
+        2. From top to bottom
+- Giving the card to
+    1. The player with fewer cards in front of them
+    2. If tied to the player sitting closer to the first player in the round
+- If a card has no markers, it is immediately placed on the discard pile
 
 ### Paying for the bid
 
