@@ -1,7 +1,8 @@
 # Mars Auction Variant
 version: 1.1
 
-1. At the beginning of the game:
+### At the beginning of the game
+
     1. We spread out cards face up on the table:
         1. Player*2 Company cards
         2. Player*4 Prelude cards
@@ -12,11 +13,16 @@ version: 1.1
         3. Bidding on Prelude and Project cards
         4. Evaluating Prelude cards and passing on the starting player
         5. Bidding and evaluating Project card and passing on the starting player
-2. In the research phase of the game:
+
+### In the research phase of the game
+
     1. We spread out player*4 Project cards face up on the table
     2. Bidding and evaluating the Project cards according to the card distribution rules
 
-3. Card distribution rules "Limited version":
+## Card distribution rules
+
+### Limited variant:
+
     1. Bidding
         1. Each player puts 1 or 2 of their markers on any card(s), or passes.
         2. A player can have a maximum of 3 markers on a card
@@ -42,7 +48,8 @@ version: 1.1
             1. The effect of the Terralab company is supplemented as follows:
             "When you take a card in front of you, pay one less for your bid."
 
-4. Card distribution rules, "Unlimited version":
+### Unlimited variant
+
     1. Bidding
         1. We start bidding the cards layed out one by one.
         2. The first player starts the bid with 0 or a higher number
