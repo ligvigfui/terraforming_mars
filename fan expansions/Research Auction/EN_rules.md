@@ -17,7 +17,7 @@ version: 1.1
 5. [Evaluate](#evaluation-distribution-of-the-cards) Prelude cards
 6. Pass on the starting player
 7. [Bid](#bidding) on Project cards
-8. [Evaluat](#evaluation-distribution-of-the-cards) Project cards
+8. [Evaluate](#evaluation-distribution-of-the-cards) Project cards
 9. Pass on the starting player
 
 ### Research (at the start of every generation)
@@ -42,7 +42,7 @@ version: 1.1
 - Start evaluating
     1. From the card with the most amount of total markers on it to the card with the least markers
     2. In reading order
-        1. From right to left
+        1. From left to right
         2. From top to bottom
 - Giving the card to
     1. The player with fewer cards in front of them
