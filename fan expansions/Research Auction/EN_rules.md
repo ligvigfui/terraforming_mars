@@ -37,45 +37,37 @@ Go through the table below from left to right
 
 - Going in rounds
 - Each player can
-    1. put 1 or 2 of their markers on any card(s), or pass for the remainder of this bidding round.
-    2. have a maximum of 3 markers on a card
-    3. use a maximum of 15 markers in each bidding round.
-    4. only place markers while they are able to pay for all of them!
+    1. Put 1 or 2 of their markers on any card(s), or pass for the remainder of this bidding round.
+    2. Have a maximum of 3 markers on a card
+    3. Use a maximum of 15 markers in each bidding round.
+    4. Only place markers while they are able to pay for all of them!
 
 ### Evaluation (distribution) of the cards
 
-- Start evaluating
-    1. From the card with the most amount of total markers on it to the card with the least markers
+- Pick a card
+    1. With the most amount of total markers on it, if tied
     2. In reading order
         1. From left to right
         2. From top to bottom
-- Giving the card to
-    1. The player with fewer cards in front of them
-    2. If tied to the player sitting closer to the first player in the round
-- If a card has no markers, it is immediately placed on the discard pile
+- Move the card in front of the player
+    1. With the most amount of player markers on it, if tied
+    2. With fewer cards in front of them, if tied
+    3. Sitting closer to the first player in the round
+- If a card has no markers, it is immediately discarded.
 
 ### Paying for the bid
 
-1. Every project card that a player wins and takes in front of them must be paid for in the amount of markers placed on it by the bid winning player.
+- When a player wins a bid, they pay the amount of markers placed on the card by them.
+- Then move the card in front of them.
 
 ### Recieving cards
 
-1. Company / Prelude cards
-    - Choose 1 / 2 card(s) respectively from the cards in front of you and pay your bids reduced by 1 per card.
-2. Project cards
-    - Players can buy each card in front of them for 2M€
+| Card type | What to do |
+|-----------|------------|
+| Company | Choose 1 from the cards in front of you and pay your bids reduced by 1 per card in front of you. |
+| Prelude | Choose 2 from the cards in front of you and pay your bids reduced by 1 per card in front of you. |
+| Project | Buy any number of cards in front of you for 2M€ each |
 
 ## Other changes
 
 - The effect of the Terralab company is supplemented as follows: "When you take a card in front of you, pay one less for your bid."
-
-Example:
-
-- Anne got 2 Companies. She must choose one (since you have one company) and discard the other.
-- After recieving the money from the Company starting amount she pais the amount (3M€) she won the bids with reduced by 2 (1 for each Company) for a total of 1M€.
-
-2. Example
-    - Anne has 2, Bill has 1 marker on the first card.
-    - At the start of [evaluation](#evaluation-distribution-of-the-cards) Anne takes the card in front of her
-    - pays her 2 markers
-    - returns Bill's marker
