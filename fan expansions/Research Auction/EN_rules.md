@@ -2,9 +2,9 @@
 
 1. At the beginning of the game:
     1. We spread out cards face up on the table:
-        1. Player*2 company cards
-        2. Player*4 start cards
-        3. Player*10 project cards
+        1. Player*2 Company cards
+        2. Player*4 Prelude cards
+        3. Player*10 Project cards
     2. We perform according to the card distribution rules:
         1. Bidding on ANY type of cards
         2. Evaluating Company cards and passing on the starting player
