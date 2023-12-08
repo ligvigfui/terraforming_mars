@@ -41,6 +41,7 @@ Go through the table below from left to right
     2. Have a maximum of 3 markers on a card
     3. Use a maximum of 15 markers in each bidding round.
     4. Only place markers while they are able to pay for all of them!
+- The first bid on Company and Prelude cards is free.
 
 ### Evaluation (distribution) of the cards
 
@@ -58,16 +59,17 @@ Go through the table below from left to right
 ### Paying for the bid
 
 - When a player wins a bid, they pay the amount of markers placed on the card by them.
-- Then move the card in front of them.
+- And remove all markers from it.
 
 ### Recieving cards
 
 | Card type | What to do |
 |-----------|------------|
-| Company | Choose 1 from the cards in front of you and pay your bids reduced by 1 per card in front of you. |
-| Prelude | Choose 2 from the cards in front of you and pay your bids reduced by 1 per card in front of you. |
-| Project | Buy any number of cards in front of you for 2M€ each |
+| Company | Choose 1 from the cards in front of you. Play it then pay your bids. |
+| Prelude | Pay your bids. Then choose 2 from the cards in front of you. Play them. |
+| Project | Buy to hand any number of cards in front of you for 2M€ each. |
 
 ## Other changes
 
-- The effect of the Terralab company is supplemented as follows: "When you take a card in front of you, pay one less for your bid."
+- The effect of the Terralab company is supplemented as follows: "When you move a card in front of you, pay one less for your bid."
+- The effect of the Polyphemos company is replaced with: "When you move a card in front of you, pay one more for your bid. When you buying a card to hand, pay 3M€ for it."
