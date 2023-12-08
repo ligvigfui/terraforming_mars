@@ -13,26 +13,25 @@ version: 1.1
 - Player*10 Project cards
 
 face up on the table.
-Then go throw the table below in reading order
+
+Then go through the table below in reading order
 
 - From left to right
 - From top to bottom
 
-| Spread cards | Place Bets on | Continue from evaluation | Pass on the starting player |
-|--------------|---------------|--------------------------|-----------------------------|
+| Spread cards | Players can bet on | Continue from evaluation | Pass on the starting player |
+|--------------|--------------------|--------------------------|-----------------------------|
 | [*above](#at-the-start-of-the-game-spread-out) | ANY type of cards | Company cards | Yes |
 | | Prelude and Project | Prelude cards | Yes |
-| | Project | Project cards | Yes |
+| | Project cards | Project cards | Yes |
 
 #### Instead of the Research phase at the start of every generation
 
-Go throw the table below in reading order
+Go through the table below from left to right
 
-- From left to right
-
-| Spread cards | Place Bets on | Continue from evaluation | Pass on the starting player |
-|--------------|---------------|--------------------------|-----------------------------|
-| Player*4 Project | Project | Project cards | No |
+| Spread cards | Players can bet on | Continue from evaluation | Pass on the starting player |
+|--------------|--------------------|--------------------------|-----------------------------|
+| Player*4 Project | Project cards | Project cards | No |
 
 ### Bidding
 
