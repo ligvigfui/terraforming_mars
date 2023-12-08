@@ -6,35 +6,36 @@ version: 1.1
 
 ### Setup (at the beginning of the game)
 
-1. We spread out cards face up on the table
-    1. Player*2 Company cards
-    2. Player*4 Prelude cards
-    3. Player*10 Project cards
-
-2. We perform according to the [card distribution rules](#card-distribution-rules)
-    1. Bidding on ANY type of cards
-    2. Evaluating Company cards
-    3. Passing on the starting player
-    4. Bidding on Prelude and Project cards
-    5. Evaluating Prelude cards
-    6. Passing on the starting player
-    7. Bidding on Project cards
-    8. Evaluating Project cards
-    9. Passing on the starting player
+0. Spread out cards face up on the table
+    - Player*2 Company cards
+    - Player*4 Prelude cards
+    - Player*10 Project cards
+1. [Bid](#bidding) on ANY type of cards
+2. [Evaluate](#evaluation-distribution-of-the-cards) Company cards
+3. Pass on the starting player
+4. [Bid](#bidding) on Prelude and Project cards
+5. [Evaluate](#evaluation-distribution-of-the-cards) Prelude cards
+6. Pass on the starting player
+7. [Bid](#bidding) on Project cards
+8. [Evaluat](#evaluation-distribution-of-the-cards) Project cards
+9. Pass on the starting player
 
 ### Research (at the start of every generation)
 
-1. We spread out player*4 Project cards face up on the table
-2. Bidding and evaluating the Project cards according to the [card distribution rules](#card-distribution-rules)
+1. Spread out player*4 Project cards face up on the table
+2. [Bid](#bidding) on the cards
+3. [Evaluate](#evaluation-distribution-of-the-cards) the Project cards
 
 ## Card distribution rules
 
 ### Bidding
 
-1. Each player puts 1 or 2 of their markers on any card(s), or passes.
-2. A player can have a maximum of 3 markers on a card
-3. Each player can use a maximum of 15 markers in each bidding round.
-4. Players can only place markers while they are able to pay for all of them!
+- Going in rounds
+- Each player
+    1. Puts 1 or 2 of their markers on any card(s), or passes for the remainder of this bidding round.
+    2. Can have a maximum of 3 markers on a card
+    3. Can use a maximum of 15 markers in each bidding round.
+    4. Can only place markers while they are able to pay for all of them!
 
 ### Evaluation (distribution) of the cards
 
