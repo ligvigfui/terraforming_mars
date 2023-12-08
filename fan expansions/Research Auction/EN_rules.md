@@ -19,8 +19,8 @@ Then go through the table below in reading order
 - From left to right
 - From top to bottom
 
-| Spread cards | Players can bet on | Continue from evaluation | Pass on the starting player |
-|--------------|--------------------|--------------------------|-----------------------------|
+| Spread cards | Players can bet on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+|--------------|--------------------|----------|-----------------------------|
 | [*above](#at-the-start-of-the-game-spread-out) | ANY type of cards | Company cards | Yes |
 | | Prelude and Project | Prelude cards | Yes |
 | | Project cards | Project cards | Yes |
@@ -29,8 +29,8 @@ Then go through the table below in reading order
 
 Go through the table below from left to right
 
-| Spread cards | Players can bet on | Continue from evaluation | Pass on the starting player |
-|--------------|--------------------|--------------------------|-----------------------------|
+| Spread cards | Players can bet on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+|--------------|--------------------|----------|-----------------------------|
 | Player*4 Project | Project cards | Project cards | No |
 
 ### Bidding
