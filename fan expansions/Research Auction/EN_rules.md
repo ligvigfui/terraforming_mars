@@ -44,10 +44,10 @@ Go through the spreadsheet below from left to right
 
 - Going in rounds
 - Each player can
-    1. Put 1 or 2 of their markers on any card(s), or pass for the remainder of this bidding round.
-    2. Have a maximum of 3 markers on a card
-    3. Use a maximum of 15 markers in each bidding round.
-    4. Only place markers while they are able to pay for all of them!
+    - Put 1 or 2 of their markers on any card(s), or pass for the remainder of this bidding round.
+    - Have a maximum of 3 markers on each card
+    - Use a maximum of 15 markers in each bidding round.
+    - Only place markers while they are able to pay for all of them!
 - The first bid on Company and Prelude cards is free.
 
 ## Evaluation
