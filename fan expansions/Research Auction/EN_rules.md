@@ -2,11 +2,18 @@
 
 version: 1.1
 
-## Card distribution rules
+# Subphases in order
+
+- [Setup](#setup) either [at the start of the game](#at-the-start-of-the-game-spread-out) or [at the start of every generation](#instead-of-the-research-phase-at-the-start-of-every-generation)
+- [Bidding](#bidding)
+- [Evaluation](#evaluation)
+    - [Distribution of the cards](#distribution-of-the-cards)
+    - [Paying for the bid](#paying-for-the-bid)
+    - [Recieving cards (to hand)](#recieving-cards-to-hand)
 
 ### Setup
 
-#### At the start of the game spread out
+##### At the start of the game spread out
 
 - Player*2 Company cards
 - Player*4 Prelude cards
@@ -19,17 +26,17 @@ Then go through the table below in reading order
 - From left to right
 - From top to bottom
 
-| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation) | Pass on the starting player |
 |--------------|--------------------|----------|-----------------------------|
 | [*above](#at-the-start-of-the-game-spread-out) | ANY type of cards | Company cards | Yes |
 | | Prelude and Project | Prelude cards | Yes |
 | | Project cards | Project cards | Yes |
 
-#### Instead of the Research phase at the start of every generation
+##### Instead of the Research phase at the start of every generation
 
 Go through the table below from left to right
 
-| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation) | Pass on the starting player |
 |--------------|--------------------|----------|-----------------------------|
 | Player*4 Project | Project cards | Project cards | No |
 
@@ -43,7 +50,9 @@ Go through the table below from left to right
     4. Only place markers while they are able to pay for all of them!
 - The first bid on Company and Prelude cards is free.
 
-### Evaluation (distribution) of the cards
+## Evaluation
+
+### Distribution of the cards
 
 - Pick a card
     1. With the most amount of total markers on it, if tied
