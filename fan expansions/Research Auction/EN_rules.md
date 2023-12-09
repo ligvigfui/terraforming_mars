@@ -8,7 +8,7 @@ version: 1.1
 - [Bidding](#bidding)
 - [Evaluation](#evaluation)
     - [Distribution of the cards](#distribution-of-the-cards)
-    - [Paying for the bid](#paying-for-the-bid)
+    - [Paying for the bids](#paying-for-the-bids)
     - [Recieving cards (to hand)](#recieving-cards-to-hand)
 
 ### Setup
@@ -21,7 +21,7 @@ version: 1.1
 
 face up on the table.
 
-Then go through the table below in reading order
+Then go through the spreadsheet below in reading order
 
 - From left to right
 - From top to bottom
@@ -34,7 +34,7 @@ Then go through the table below in reading order
 
 ##### Instead of the Research phase at the start of every generation
 
-Go through the table below from left to right
+Go through the spreadsheet below from left to right
 
 | Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation) | Pass on the starting player |
 |--------------|--------------------|----------|-----------------------------|
@@ -65,7 +65,7 @@ Go through the table below from left to right
     3. Sitting closer to the first player in the round
 - If a card has no markers, it is immediately discarded.
 
-### Paying for the bid
+### Paying for the bids
 
 - When a player wins a bid, they pay the amount of markers placed on the card by them.
 - And remove all markers from it.
