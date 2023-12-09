@@ -59,10 +59,10 @@ Go through the spreadsheet below from left to right
     2. In reading order
         1. From left to right
         2. From top to bottom
-- Move the card in front of the player
-    1. With the most amount of player markers on it, if tied
-    2. With fewer cards in front of them, if tied
-    3. Sitting closer to the first player in the round
+- Move the card in front of
+    1. The player with the most amount of player markers on it, if tied
+    2. The player with fewer cards in front of them, if tied
+    3. The player sitting closer to the first player in the round
 - If a card has no markers, it is immediately discarded.
 
 ### Paying for the bids
