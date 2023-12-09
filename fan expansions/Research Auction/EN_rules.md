@@ -19,7 +19,7 @@ Then go through the table below in reading order
 - From left to right
 - From top to bottom
 
-| Spread cards | Players can bet on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
 |--------------|--------------------|----------|-----------------------------|
 | [*above](#at-the-start-of-the-game-spread-out) | ANY type of cards | Company cards | Yes |
 | | Prelude and Project | Prelude cards | Yes |
@@ -29,7 +29,7 @@ Then go through the table below in reading order
 
 Go through the table below from left to right
 
-| Spread cards | Players can bet on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
+| Spread cards | Players can [bid](#bidding) on | [Evaluate](#evaluation-distribution-of-the-cards) | Pass on the starting player |
 |--------------|--------------------|----------|-----------------------------|
 | Player*4 Project | Project cards | Project cards | No |
 
@@ -61,13 +61,13 @@ Go through the table below from left to right
 - When a player wins a bid, they pay the amount of markers placed on the card by them.
 - And remove all markers from it.
 
-### Recieving cards
+### Recieving cards (to hand)
 
 | Card type | What to do |
 |-----------|------------|
 | Company | Choose 1 from the cards in front of you. Play it then pay your bids. |
-| Prelude | Pay your bids. Then choose 2 from the cards in front of you. Play them. |
-| Project | Buy to hand any number of cards in front of you for 2M€ each. |
+| Prelude | Pay your bids. Choose 2 from the cards in front of you. Play them. |
+| Project | Pay your bids. Buy to hand any number of cards in front of you for 2M€ each. |
 
 ## Other changes
 
