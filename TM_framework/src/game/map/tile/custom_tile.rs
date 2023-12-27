@@ -9,6 +9,7 @@ impl PartialEq for CustomTile {
         stringify!(self.where_can_place_function) == stringify!(other.where_can_place_function)
     }
 }
+
 impl Debug for CustomTile {
     fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("CustomTile")
@@ -18,10 +19,11 @@ impl Debug for CustomTile {
             .finish()
     }
 }
-impl PlaceableTile for CustomTile {}
+
+impl Placeable for CustomTile {}
 #[derive(Clone)]
 pub struct CustomTile {
     pub name: String,
     pub picture: Picture,
-    pub where_can_place_function: fn(map: &Map, player_id: &u8, tile: &PlaceableTileType) -> Vec<(i32, i32)>,
+    pub where_can_place_function: fn(map: &MarsMap, player_id: &u8) -> Vec<(i32, i32, u8)>,
 }

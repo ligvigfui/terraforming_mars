@@ -1,43 +1,29 @@
 use crate::*;
 
-
-pub trait TMarsTile: Tile {}
-
+impl Tile for MarsTile {}
 #[derive(Debug, Clone)]
 pub struct MarsTile {
-    pub tile: MarsTileType,
+    pub kind: MarsTileKind,
     pub reward: Vec<OnCardAction>,
 }
 
-impl Tile for MarsTile {}
+#[derive(Debug, PartialEq, Clone)]
+pub enum MarsTileKind {
+    Natural(NaturalTile),
+    Occupied { tile: PlaceableTile, player_id: u8 },
+}
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum MarsTileType {
+pub enum NaturalTile {
     Land,
     Vulcano(String),
     ReservedOcean,
     NoctisCityReserved,
-    Occupied(OccupiedTile),
 }
 
+impl Placeable for PlaceableTile {}
 #[derive(Debug, PartialEq, Clone)]
-pub struct OccupiedTile {
-    pub(crate) tile: PlaceableTileType,
-    pub(crate) owner_id: u8,
-}
-
-impl OccupiedTile {
-    pub fn new() -> Self {
-        Self {
-            tile: PlaceableTileType::Ocean,
-            owner_id: 0,
-        }
-    }
-}
-
-impl PlaceableTile for PlaceableTileType {}
-#[derive(Debug, PartialEq, Clone)]
-pub enum PlaceableTileType {
+pub enum PlaceableTile {
     Ocean,
     City,
     Greenery,

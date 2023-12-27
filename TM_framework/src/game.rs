@@ -6,7 +6,7 @@ pub mod milestone;
 pub mod award;
 pub mod map;
 pub mod board;
-
+pub mod turmoil;
 
 
 //disable warn dead code
@@ -43,12 +43,10 @@ pub enum Origin{
     Custom(String),
 }
 
-
-
-
 #[derive(Debug)]
 ///! still not good need to change milestone, award, phase, history, include turmoil, colonies
 pub struct Game {
+    rules: Rules,
     players: Vec<Player>,
     deck: Vec<ProjectCard>,
     discard: Vec<ProjectCard>,
@@ -179,7 +177,9 @@ impl Game {
             let player = &mut self.players[player_index];
             player.resources.remove_upto(resource)
         }
-        OnCardAction::PlaceTile(tile_type) => todo!(),
+        OnCardAction::PlaceTile(tile_type) => {
+            todo!()
+        }
         OnCardAction::RemoveTile(_) => todo!(),
         OnCardAction::ModifyTerraformRating(_) => todo!(),
         OnCardAction::ModifyGlobalParameter(_) => todo!(),
@@ -191,7 +191,7 @@ impl Game {
     }
 }
 
-
+#[derive(Debug, Clone)]
 pub struct Rules {
     actions_per_turn: u8,
     award_rules: AwardRules,
@@ -206,17 +206,6 @@ pub struct Rules {
 pub enum Language {
     English(String),
     Hungarian(String),
-}
-
-
-#[derive(Debug, Clone)]
-pub enum TurmoilParty {
-    Scientists,
-    Unity,
-    Reds,
-    Greens,
-    Kelvinists,
-    MarsFirst,
 }
 
 #[derive(Debug,  Clone)]

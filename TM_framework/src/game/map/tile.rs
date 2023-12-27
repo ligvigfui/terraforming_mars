@@ -1,10 +1,9 @@
 pub mod mars_tile;
-pub mod space_tile;
 pub mod custom_tile;
 
 pub trait Tile {}
 
-pub trait PlaceableTile {}
+pub trait Placeable {}
 
 pub fn next_to(coords: (i32, i32)) -> Vec<(i32, i32)>{
     vec![(coords.0 +1, coords.1 ),
