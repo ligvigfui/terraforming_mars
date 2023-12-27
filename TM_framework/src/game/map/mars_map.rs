@@ -2,9 +2,9 @@ use std::{collections::{HashMap, HashSet}, vec};
 
 use crate::*;
 
-pub mod baseMap;
-pub mod hellasMap;
-pub mod elysiumMap;
+pub mod base_map;
+pub mod hellas_map;
+pub mod elysium_map;
 
 struct MarsMap {
     has_vulcanos: bool,
@@ -25,7 +25,7 @@ impl MarsMap {
     }
 }
 
-impl Map<MarsTile, PlaceableTileType> for MarsMap {
+impl MapType<MarsTile, PlaceableTileType> for MarsMap {
     fn new() -> Self {
         MarsMap {
             has_vulcanos: true,

@@ -23,5 +23,5 @@ impl PlaceableTile for CustomTile {}
 pub struct CustomTile {
     pub name: String,
     pub picture: Picture,
-    pub where_can_place_function: fn(map: &MarsTile, player_id: &u8, tile: &PlaceableTileType) -> Vec<(i32, i32)>,
+    pub where_can_place_function: fn(map: &Map, player_id: &u8, tile: &PlaceableTileType) -> Vec<(i32, i32)>,
 }

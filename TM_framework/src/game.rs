@@ -179,15 +179,7 @@ impl Game {
             let player = &mut self.players[player_index];
             player.resources.remove_upto(resource)
         }
-        OnCardAction::PlaceTile(tile_type) => {
-            let tile = match tile_type {
-                PlaceableTileType::City => OccupiedTileType::City,
-                PlaceableTileType::Greenery => OccupiedTileType::Greenery,
-                PlaceableTileType::Ocean => OccupiedTileType::Ocean,
-                PlaceableTileType::Special => OccupiedTileType::Special,
-            };
-            self.current_player().place_tile(tile)
-        }
+        OnCardAction::PlaceTile(tile_type) => todo!(),
         OnCardAction::RemoveTile(_) => todo!(),
         OnCardAction::ModifyTerraformRating(_) => todo!(),
         OnCardAction::ModifyGlobalParameter(_) => todo!(),

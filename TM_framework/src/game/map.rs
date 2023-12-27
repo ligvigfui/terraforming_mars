@@ -4,15 +4,15 @@ use crate::*;
 
 
 pub mod tile;
-pub mod marsMap;
-pub mod spaceMap;
+pub mod mars_map;
+pub mod space_map;
 
 
 //     (-1,1)    (0,1)
 //(-1,0)    (0,0)     (1,0)
 //     (0,-1)    (1,-1)
 
-pub trait Map<T: Tile, PT: PlaceableTile> {
+pub trait MapType<T: Tile, PT: PlaceableTile> {
     fn new() -> Self;
     fn add(self, x: i32, y: i32, tile: T) -> Self;
     fn get_mut(&mut self, x: i32, y: i32) -> Option<&mut T>;
@@ -20,7 +20,7 @@ pub trait Map<T: Tile, PT: PlaceableTile> {
     fn on_before_where_can_place_tile(&self, player_id: &u8, tile: &PlaceableTileType) -> (HashMap<(i32, i32), usize>, Vec<MarsTile>);
 }
 
-pub enum Maps {
+pub enum Map {
     Base,
     Hellas,
     Elysium,

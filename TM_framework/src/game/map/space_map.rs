@@ -1,6 +1,6 @@
 use crate::*;
 
-impl Map<SpaceTile, SpaceTileType> for SpaceMap {
+impl MapType<SpaceTile, SpaceTileType> for SpaceMap {
     fn new() -> Self {
         todo!()
     }

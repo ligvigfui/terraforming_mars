@@ -1,6 +1,6 @@
-pub mod marsTile;
-pub mod spaceTile;
-pub mod customTile;
+pub mod mars_tile;
+pub mod space_tile;
+pub mod custom_tile;
 
 pub trait Tile {}
 
