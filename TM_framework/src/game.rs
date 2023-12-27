@@ -13,13 +13,6 @@ pub mod board;
 #[allow(dead_code)]
 
 
-
-
-
-
-
-
-
 #[derive(Debug)]
 enum Phase {
     // somehow get cards to chose from
@@ -38,7 +31,7 @@ enum Phase {
     NextPlayer,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Origin{
     Base,
     CorporateEra,
@@ -73,13 +66,137 @@ pub struct Game {
 }
 
 impl Game {
-    pub fn current_player(&self) -> &Player {
-        &self.players[self.current_player as usize]
+    pub fn current_player(&mut self) -> &mut Player {
+        &mut self.players[self.current_player as usize]
     }
     pub fn next_player(&mut self) {
         self.current_player = (self.current_player + 1) % self.players.len() as u8;
     }
 
+    fn reshoufle(&mut self) {
+        if self.deck.len() != 0 {return;}
+        //todo rand:thread_random()
+        let random = 0;
+        for i in (0..self.discard.len()).rev() {
+            //todo get rangom between 0..i
+            let rand = i;
+            self.deck.push(self.discard.remove(i));
+        }
+    }
+
+    fn get_card_from_deck(&mut self) -> Option<ProjectCard> {
+        match self.deck.pop() {
+            Some(card) => Some(card),
+            None => {
+                if self.discard.is_empty() {return None;};
+                self.reshoufle();
+                self.deck.pop()
+            }
+        }
+    }
+
+    pub(crate) fn get_cards_from_deck(&mut self, n: usize) -> Vec<ProjectCard> {
+        let mut vec = Vec::with_capacity(n);
+        for _ in 0..n {
+            match self.get_card_from_deck() {
+                Some(card) => vec.push(card),
+                None => return vec,
+            }
+        }
+        vec
+    }
+
+    pub(crate) fn play_oca(&mut self, action: OnCardAction, params: Vec<String>) -> Result<(), String> {
+        match action {
+        OnCardAction::ResearchCard(n) => {
+            let cards = self.get_cards_from_deck(n.into());
+            self.current_player().research.extend(cards);
+            Ok(())
+        },
+        OnCardAction::DrawCard(n) => {
+            let cards = self.get_cards_from_deck(n.into());
+            self.current_player().hand.extend(cards);
+            Ok(())
+        }
+        OnCardAction::Discard(n) => {
+            if self.current_player().hand.len() < n.into() {
+                let player_name = &self.current_player().name;
+                return Err(format!("{player_name} doesn't have {n} cards in hand"));
+            }
+            if params.len() != n.into() {return Err("Internal error: game.play_oca/Discard param.len != n".to_string());}
+            for card_id in params {
+                let card = match self.current_player().hand.iter().position(|card| card_id == card.id) {
+                    Some(position) => self.current_player().hand.remove(position),
+                    None => return Err("Internal error: game.play_oca/discard card number is wrong".to_string()),
+                };
+                self.discard.push(card)
+            }
+            Ok(())
+        }
+        OnCardAction::BuyCardAfterResearch(n) => {
+            let current_player = self.current_player();
+            if Into::<u16>::into(current_player.characteristics.card_cost * n) < current_player.resources.money {
+                let player_name = &current_player.name;
+                let adequate_money = current_player.characteristics.card_cost * n;
+                return Err(format!("{player_name} doesn't have {adequate_money} M€ to buy {n} cards"));
+            }
+            if params.len() != n.into() {return Err("Internal error: game.play_oca/BuyCard param.len != n".to_string());}
+            for card_id in params {
+                let card = match current_player.research.iter().position(|card| card_id == card.id) {
+                    Some(position) => current_player.research.remove(position),
+                    None => return Err("Internal error: game.play_oca/BuyCard number is wrong".to_string()),
+                };
+                current_player.hand.push(card)
+            }
+            Ok(())
+        }
+        OnCardAction::ModifyResources(resource) => self.current_player().resources.modify(resource),
+        OnCardAction::ModifyProduction(production) => self.current_player().production.modify(production),
+        OnCardAction::MustRemoveFromAnyPlayersResources(resource) => {
+            let player_index = match params[0].parse::<usize>() {
+                Ok(index) => index,
+                Err(e) => return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersResources {e}")),
+            };
+            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersResources player_index {player_index} is greater then player number"));}
+            let player = &mut self.players[player_index];
+            player.resources.modify(resource)
+        },
+        OnCardAction::MustRemoveFromAnyPlayersProduction(production) => {
+            let player_index = match params[0].parse::<usize>() {
+                Ok(index) => index,
+                Err(e) => return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersProduction {e}")),
+            };
+            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersProduction player_index {player_index} is greater then player number"));}
+            let player = &mut self.players[player_index];
+            player.production.modify(production)
+        }
+        OnCardAction::RemoveFromAnyPlayersResources(resource) => {
+            let player_index = match params[0].parse::<usize>() {
+                Ok(index) => index,
+                Err(e) => return Err(format!("Internal error: game.play_oca/RemoveFromAnyPlayersResources {e}")),
+            };
+            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/RemoveFromAnyPlayersResources player_index {player_index} is greater then player number"));}
+            let player = &mut self.players[player_index];
+            player.resources.remove_upto(resource)
+        }
+        OnCardAction::PlaceTile(tile_type) => {
+            let tile = match tile_type {
+                PlaceableTileType::City => OccupiedTileType::City,
+                PlaceableTileType::Greenery => OccupiedTileType::Greenery,
+                PlaceableTileType::Ocean => OccupiedTileType::Ocean,
+                PlaceableTileType::Special => OccupiedTileType::Special,
+            };
+            self.current_player().place_tile(tile)
+        }
+        OnCardAction::RemoveTile(_) => todo!(),
+        OnCardAction::ModifyTerraformRating(_) => todo!(),
+        OnCardAction::ModifyGlobalParameter(_) => todo!(),
+        OnCardAction::ModifyCardResource(_) => todo!(),
+        OnCardAction::PlaceColony => todo!(),
+        OnCardAction::MoveDelegete => todo!(),
+        OnCardAction::Custom(_) => todo!(),
+        }
+    }
 }
 
 
@@ -87,20 +204,20 @@ pub struct Rules {
     actions_per_turn: u8,
     award_rules: AwardRules,
     prelude: bool,
-    map: Maps,
+    map: Map,
     venus_next: bool,
     colonies: bool,
     turmoil: bool,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Language {
     English(String),
     Hungarian(String),
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TurmoilParty {
     Scientists,
     Unity,
@@ -110,7 +227,7 @@ pub enum TurmoilParty {
     MarsFirst,
 }
 
-#[derive(Debug)]
+#[derive(Debug,  Clone)]
 pub enum VictoryPoint {
     VP(i8),
     PerTag(i8, Tag, u8),

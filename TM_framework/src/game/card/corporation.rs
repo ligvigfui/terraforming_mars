@@ -1,7 +1,7 @@
 use crate::*;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Corporation {
     name: Vec<Language>,
     effect: Vec<Language>,

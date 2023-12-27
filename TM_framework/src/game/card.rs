@@ -2,18 +2,11 @@ use core::fmt;
 
 use crate::*;
 
-
-
-
-
-
 pub mod corporation;
 pub mod prelude;
 pub mod project;
-pub mod standardProject;
+pub mod standard_project;
 pub mod action;
-
-
     
 #[derive(Debug)]
 enum CardType {
@@ -22,14 +15,14 @@ enum CardType {
     Project,
 }
 
-pub trait Card: Sized {
+pub trait Playable: Sized {
     // does not check if the card can be played
-    fn play(player: &mut Player, card: &Self) -> Result<(), String>;
+    fn play(self: &Self, player: &mut Player) -> Result<(), String>;
     // checks if the card can be played
-    fn can_be_played(player: &Player, card: &Self) -> Result<(), String>;
+    fn can_be_played(self: &Self, player: &Player) -> Result<(), String>;
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Effect {
     criteria: Vec<OnCardAction>,
     reward: OnCardAction,
@@ -37,9 +30,11 @@ pub struct Effect {
 
 #[derive(Clone)]
 pub enum OnCardAction {
-    // move card from research to hand
-    BuyCard(u8),
-    // draw random card from deck
+    // move cards from the deck to the players reserach place
+    ResearchCard(u8),
+    // buy card from research to hand
+    BuyCardAfterResearch(u8),
+    // draw random card from deck witouth moving them to research (you don't have an option to chose)
     DrawCard(u8),
     // move card from research or hand to discard
     Discard(u8),
@@ -55,13 +50,13 @@ pub enum OnCardAction {
     ModifyCardResource(CardResource),
     PlaceColony,
     MoveDelegete,
-    Custom(fn(&mut Game) -> Result<(), String>),
+    Custom(fn(&mut Game, params: Vec<String>) -> Result<(), String>),
 }
 
 impl PartialEq for OnCardAction {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
-            (Self::BuyCard(l0), Self::BuyCard(r0)) => l0 == r0,
+            (Self::BuyCardAfterResearch(l0), Self::BuyCardAfterResearch(r0)) => l0 == r0,
             (Self::DrawCard(l0), Self::DrawCard(r0)) => l0 == r0,
             (Self::Discard(l0), Self::Discard(r0)) => l0 == r0,
             (Self::ModifyResources(l0), Self::ModifyResources(r0)) => l0 == r0,
@@ -82,7 +77,10 @@ impl PartialEq for OnCardAction {
 impl fmt::Debug for OnCardAction {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            OnCardAction::BuyCard(amount) => {
+            OnCardAction::ResearchCard(amount) => {
+                write!(f, "ResearchCard({})", amount)
+            },
+            OnCardAction::BuyCardAfterResearch(amount) => {
                 write!(f, "BuyCard({})", amount)
             },
             OnCardAction::DrawCard(amount) => {
@@ -135,7 +133,7 @@ impl fmt::Debug for OnCardAction {
 }
 
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Tag {
     Building,
     Space,
@@ -162,5 +160,5 @@ pub enum CardResource {
     Asteroid(i8),
     Data(i8),
     Radtiation(i8),
-    Custom(String, Picture, i8),
+    Custom(String, i8),
 }

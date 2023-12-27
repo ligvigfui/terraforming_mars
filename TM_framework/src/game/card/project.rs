@@ -3,7 +3,7 @@ use crate::*;
 
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Usefullness{
     Great,
     Ok,
@@ -11,30 +11,30 @@ pub enum Usefullness{
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Color {
     Red,
     Green,
     Blue,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ProjectCard {
-    id: String,
-    color: Color,
-    name: Vec<Language>,
-    cost: i32,
-    requirements: Option<Vec<Requirement>>,
-    tags: Vec<Tag>,
-    effect_discription: Vec<Language>,
-    card_resource: Option<CardResource>,
-    action: Vec<Action>,
-    effect: Vec<Effect>,
-    on_card_action: Option<Vec<OnCardAction>>,
-    vp: Option<VictoryPoint>,
-    motivational_quote: Option<Vec<Language>>,
-    bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
-    origin: Vec<Origin>
+    pub id: String,
+    pub color: Color,
+    pub name: Vec<Language>,
+    pub cost: i32,
+    pub requirements: Option<Vec<Requirement>>,
+    pub tags: Vec<Tag>,
+    pub effect_discription: Vec<Language>,
+    pub card_resource: Option<CardResource>,
+    pub action: Vec<Action>,
+    pub effect: Vec<Effect>,
+    pub on_card_action: Option<Vec<OnCardAction>>,
+    pub vp: Option<VictoryPoint>,
+    pub motivational_quote: Option<Vec<Language>>,
+    pub(crate) bets_time_to_get: Option<(Usefullness, Usefullness, Usefullness)>,
+    pub origin: Vec<Origin>
 }
 
 //setup implementation
@@ -136,7 +136,7 @@ impl PartialEq for ProjectCard {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Requirement {
     Tag(Vec<(Tag, usize, MinMax)>),
     Production(Resource),

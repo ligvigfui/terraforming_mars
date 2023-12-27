@@ -1,4 +1,4 @@
-# Mars Auction Variant
+# Terraforming Mars Auction Variant
 
 version: 1.1
 

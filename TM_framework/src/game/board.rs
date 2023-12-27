@@ -2,7 +2,7 @@
 
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MinMax {
     Min,
     Max,
@@ -16,7 +16,7 @@ pub enum GlobalParameter {
     Venus(i8),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GlobalParameters {
     temperature: i8,
     oxygen: u8,

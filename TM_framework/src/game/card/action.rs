@@ -1,20 +1,21 @@
 use crate::*;
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Action {
     played_this_generation: bool,
     cost: Vec<OnCardAction>,
     reward: Vec<OnCardAction>,
 }
 
-impl Card for Action {
-    fn play(player: &mut Player, card: &Self) -> Result<(), String>{
+impl Playable for Action {
+    fn play(self: &Self, player: &mut Player) -> Result<(), String> {
         todo!();
         Ok(())
     }
-    fn can_be_played(player: &Player, card: &Self) -> Result<(), String> {
-        todo!("implement card for action");
+
+    fn can_be_played(self: &Self, player: &Player) -> Result<(), String> {
+        todo!();
         Ok(())
     }
 }

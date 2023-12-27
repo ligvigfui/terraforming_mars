@@ -1,7 +1,7 @@
 
 use crate::*;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Prelude {
     name: Vec<Language>,
     description: Vec<Language>,
