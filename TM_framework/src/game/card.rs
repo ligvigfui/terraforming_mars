@@ -28,7 +28,7 @@ pub struct Effect {
     reward: OnCardAction,
 }
 
-#[derive(Clone)]
+#[derive(Clone, PartialEq)]
 pub enum OnCardAction {
     // move cards from the deck to the players reserach place
     ResearchCard(u8),
@@ -51,27 +51,6 @@ pub enum OnCardAction {
     PlaceColony,
     MoveDelegete,
     Custom(fn(&mut Game, params: Vec<String>) -> Result<(), String>),
-}
-
-impl PartialEq for OnCardAction {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Self::BuyCardAfterResearch(l0), Self::BuyCardAfterResearch(r0)) => l0 == r0,
-            (Self::DrawCard(l0), Self::DrawCard(r0)) => l0 == r0,
-            (Self::Discard(l0), Self::Discard(r0)) => l0 == r0,
-            (Self::ModifyResources(l0), Self::ModifyResources(r0)) => l0 == r0,
-            (Self::ModifyProduction(l0), Self::ModifyProduction(r0)) => l0 == r0,
-            (Self::MustRemoveFromAnyPlayersResources(l0), Self::MustRemoveFromAnyPlayersResources(r0)) => l0 == r0,
-            (Self::MustRemoveFromAnyPlayersProduction(l0), Self::MustRemoveFromAnyPlayersProduction(r0)) => l0 == r0,
-            (Self::RemoveFromAnyPlayersResources(l0), Self::RemoveFromAnyPlayersResources(r0)) => l0 == r0,
-            (Self::PlaceTile(l0), Self::PlaceTile(r0)) => l0 == r0,
-            (Self::RemoveTile(l0), Self::RemoveTile(r0)) => l0 == r0,
-            (Self::ModifyTerraformRating(l0), Self::ModifyTerraformRating(r0)) => l0 == r0,
-            (Self::ModifyGlobalParameter(l0), Self::ModifyGlobalParameter(r0)) => l0 == r0,
-            (Self::ModifyCardResource(l0), Self::ModifyCardResource(r0)) => l0 == r0,
-            _ => core::mem::discriminant(self) == core::mem::discriminant(other),
-        }
-    }
 }
 
 impl fmt::Debug for OnCardAction {
@@ -159,6 +138,5 @@ pub enum CardResource {
     Floaters(i8),
     Asteroid(i8),
     Data(i8),
-    Radtiation(i8),
     Custom(String, i8),
 }

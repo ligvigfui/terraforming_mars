@@ -26,6 +26,7 @@ impl MapType<MarsTile, PlaceableTile> for MarsMap {
             map: HashMap::new(),
         }
     }
+    
     fn add(mut self, x: i32, y: i32, tile: MarsTile) -> Self {
         self.map.insert((x, y, 0), tile);
         self
@@ -110,9 +111,30 @@ impl MapType<MarsTile, PlaceableTile> for MarsMap {
                 }
             }
             PlaceableTile::Custom(tile) => {
-                (tile.where_can_place_function)(self, player_id)
+                let mut vectors = Vec::new();
+                for function in &tile.get_placement_locations {
+                    vectors.push(function(self, player_id));
+                }
+                let mut result = vectors.pop().unwrap();
+                for vector in vectors {
+                    // get the intersection of all vectors
+                    result = result.into_iter().filter(|point| vector.contains(point)).collect();
+                }
+                result
             }
         }
+    }
+}
+
+impl MarsMap {
+    fn free_places(&self, layer: u8, allowed_tiles_below: Vec<MarsTile>) -> Vec<(i32, i32, u8)> {
+        self.map.iter().filter_map(|(&(x, y, z), tile)| {
+            if z == layer - 1 && allowed_tiles_below.contains(tile) && !self.map.contains_key(&(x, y, layer)) {
+                Some((x, y, layer))
+            } else {
+                None
+            }
+        }).collect()
     }
 }
 

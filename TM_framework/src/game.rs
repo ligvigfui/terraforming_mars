@@ -67,6 +67,14 @@ impl Game {
     pub fn current_player(&mut self) -> &mut Player {
         &mut self.players[self.current_player as usize]
     }
+
+    fn player(&mut self, id: u8) -> Result<&mut Player, String> {
+        if id >= self.players.len() as u8 {
+            return Err(format!("Internal error: game.player player_id: {id} is greater then player number"));
+        }
+        Ok(&mut self.players[id as usize])
+    }
+
     pub fn next_player(&mut self) {
         self.current_player = (self.current_player + 1) % self.players.len() as u8;
     }
@@ -169,12 +177,13 @@ impl Game {
             player.production.modify(production)
         }
         OnCardAction::RemoveFromAnyPlayersResources(resource) => {
-            let player_index = match params[0].parse::<usize>() {
+            /// params: 
+            /// 0: u8 player_id
+            let player_index = match params[0].parse::<u8>() {
                 Ok(index) => index,
                 Err(e) => return Err(format!("Internal error: game.play_oca/RemoveFromAnyPlayersResources {e}")),
             };
-            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/RemoveFromAnyPlayersResources player_index {player_index} is greater then player number"));}
-            let player = &mut self.players[player_index];
+            let player = self.player(player_index)?;
             player.resources.remove_upto(resource)
         }
         OnCardAction::PlaceTile(tile_type) => {
@@ -213,4 +222,6 @@ pub enum VictoryPoint {
     VP(i8),
     PerTag(i8, Tag, u8),
     PerResource(i8, CardResource),
+    PerNeighborTile(i8, PlaceableTile),
+    Custom(fn(game: &Game) -> i8),
 }
