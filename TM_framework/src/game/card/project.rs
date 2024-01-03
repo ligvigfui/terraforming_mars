@@ -16,6 +16,7 @@ pub enum Color {
     Red,
     Green,
     Blue,
+    Custom(String),
 }
 
 #[derive(Debug, Clone)]
@@ -82,6 +83,15 @@ impl ProjectCard {
         }
         else {
             self.requirements = Some(vec![requirement])
+        };
+        self
+    }
+    pub fn add_requirements(mut self, requirements: Vec<Requirement>)-> ProjectCard {
+        if let Some(ref mut self_requirements) = self.requirements {
+            self_requirements.extend(requirements);
+        }
+        else {
+            self.requirements = Some(requirements)
         };
         self
     }
