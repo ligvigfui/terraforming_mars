@@ -12,6 +12,7 @@ pub mod elysium_map;
 ///     (-1,0)    (0,0)     (1,0)
 /// 
 ///         (0,-1)    (1,-1)
+#[derive(Debug)]
 pub struct MarsMap {
     pub has_vulcanos: bool,
     pub has_noctis: bool,

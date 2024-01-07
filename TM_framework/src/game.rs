@@ -52,15 +52,15 @@ pub struct Game {
     discard: Vec<ProjectCard>,
     current_player: u8,
     generation: u8,
-    map: String,
+    map: MarsMap,
     temperature: i8,
-    oxygen: u8,
+    oxygen_times_10: u8,
     ocean: u8,
     venus: u8,
     milestones: Vec<Milestone>,
     awards: Vec<Award>,
     phase: Phase,
-    history: String,
+    history: Vec<String>,
 }
 
 impl Game {
@@ -68,7 +68,7 @@ impl Game {
         &mut self.players[self.current_player as usize]
     }
 
-    fn player(&mut self, id: u8) -> Result<&mut Player, String> {
+    fn player(&mut self, id: PlayerId) -> Result<&mut Player, String> {
         if id >= self.players.len() as u8 {
             return Err(format!("Internal error: game.player player_id: {id} is greater then player number"));
         }
@@ -159,27 +159,25 @@ impl Game {
         OnCardAction::ModifyResources(resource) => self.current_player().resources.modify(resource),
         OnCardAction::ModifyProduction(production) => self.current_player().production.modify(production),
         OnCardAction::MustRemoveFromAnyPlayersResources(resource) => {
-            let player_index = match params[0].parse::<usize>() {
+            let player_id = match params[0].parse::<PlayerId>() {
                 Ok(index) => index,
                 Err(e) => return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersResources {e}")),
             };
-            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersResources player_index {player_index} is greater then player number"));}
-            let player = &mut self.players[player_index];
+            let player = &mut self.player(player_id)?;
             player.resources.modify(resource)
         },
         OnCardAction::MustRemoveFromAnyPlayersProduction(production) => {
-            let player_index = match params[0].parse::<usize>() {
+            let player_id = match params[0].parse::<PlayerId>() {
                 Ok(index) => index,
                 Err(e) => return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersProduction {e}")),
             };
-            if player_index >= self.players.len() {return Err(format!("Internal error: game.play_oca/MustRemoveFromAnyPlayersProduction player_index {player_index} is greater then player number"));}
-            let player = &mut self.players[player_index];
+            let player = &mut self.player(player_id)?;
             player.production.modify(production)
         }
         OnCardAction::RemoveFromAnyPlayersResources(resource) => {
             /// params: 
             /// 0: u8 player_id
-            let player_index = match params[0].parse::<u8>() {
+            let player_index = match params[0].parse::<PlayerId>() {
                 Ok(index) => index,
                 Err(e) => return Err(format!("Internal error: game.play_oca/RemoveFromAnyPlayersResources {e}")),
             };

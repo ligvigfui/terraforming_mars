@@ -1,10 +1,14 @@
+use std::hash::Hash;
+
 use crate::*;
 
 pub static mut PLAYER_ID: u8 = 255;
 
+pub type PlayerId = u8;
+
 #[derive(Debug, Clone)]
 pub struct Player {
-    pub id: u8,
+    pub id: PlayerId,
     pub name: String,
     pub(crate) research: Vec<ProjectCard>,
     //make hand able to hold corp and prelude too
@@ -21,7 +25,6 @@ pub struct Player {
     pub(crate) actions_remaining: u8,
     pub(crate) characteristics: PlayerCharacteristics,
 }
-
 
 impl Player {
     pub fn new() -> Self {
@@ -49,6 +52,19 @@ impl Player {
         Ok(())
     } */
 }
+
+impl Hash for Player {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.id.hash(state);
+    }
+}
+
+impl PartialEq for Player {
+    fn eq(&self, other: &Self) -> bool {
+        self.id == other.id
+    }
+}
+impl Eq for Player {}
 
 #[derive(Debug, Clone)]
 pub struct PlayerCharacteristics {

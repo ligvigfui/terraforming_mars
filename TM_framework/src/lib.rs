@@ -1,6 +1,8 @@
 #![allow(dead_code)]
 #![allow(unreachable_code)]
 
+pub use std::collections::HashMap;
+
 pub use crate::game::{*, 
     map::{*, 
         tile::{*,
